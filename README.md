@@ -1,6 +1,5 @@
-# Project 2: Shiny App Development Version 2.0
-## Project Title: District Education Quality Assesment tool
-### Team 11
+# Project Title: District Education Quality Assesment tool
+## Team 11
 + Team members
 	+ Jin Jie, jj2972
 	+ Sagar Lal, sl3946 
