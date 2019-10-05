@@ -6,6 +6,8 @@ library(leaflet)
 library(maps)
 library(rgdal)
 
+library(dplyr)
+
 ## Define Manhattan's neighborhood
 man.nbhd=c("all neighborhoods", "Central Harlem", 
            "Chelsea and Clinton",
@@ -32,6 +34,7 @@ zip.nbhd[[10]]=as.character(c(10031, 10032, 10033, 10034, 10040))
 ## Load housing data
 load("../output/count.RData")
 load("../output/mh2009use.RData")
+
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
