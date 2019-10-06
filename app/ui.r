@@ -21,7 +21,7 @@ shinyUI(fluidPage
                            h3("Purpose of the tool"),
                            p("Using publicly available NY data, our tool allows users to visualize
                              the quality of schools per zipcode in the city. Different metrics such as
-                             --- and --- go into how we score the quality of a school.")
+                             emotional support and student's academic performance go into how we score the quality of a school.")
                            ),
                            tags$div(
                            h3("Who are we creating value for?"),
@@ -42,7 +42,26 @@ shinyUI(fluidPage
                            )
                    )
                )),
-               tabPanel("How *tool name* works"),
+               tabPanel("How *tool name* works", 
+                        mainPanel(
+                          tags$div(
+                            h1("** insert name of tool **"),
+                            h3("The Data"),
+                            p("This dataset comes from the NYC department of education. It includes information about 
+                              school emotional support, organization, teacher approval, as well as student performance 
+                              after pre-k. While the released dataset includes information from 2014-2015 school year 
+                              until the 2017-2018 school year, the first year is incomplete so only 
+                              the three most recent years are used.")
+                          ),
+                          tags$div(
+                          h3("Functionalities"),
+                          p("The tool allows users to see a summary of the schools of each zip code in New York's 5 
+                              borough for many different metrics. Since schools vary drastically 
+                              depending on what grades they serve, the different age schools are 
+                              on different tabs. In addition, users are able to query by year. ")
+                          )
+                        )
+                      ),
                tabPanel("Pre-K schools"),
                tabPanel("Elementary School"),
                tabPanel("High School")

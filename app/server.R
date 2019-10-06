@@ -1,6 +1,6 @@
 library(shiny)
 library(choroplethr)
-library(choroplethrZip)
+#library(choroplethrZip)
 library(dplyr)
 library(leaflet)
 library(maps)
