@@ -7,7 +7,7 @@ library(leaflet)
 library(shinythemes)
 # Need a better name for the app
 shinyUI(fluidPage
-    (theme = shinytheme("flatly"),
+    (theme = shinytheme("cerulean"),
     navbarPage(
         "District Education Quality Assesment tool",
                tabPanel(
@@ -23,6 +23,7 @@ shinyUI(fluidPage
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                            ),
+                           leafletOutput("map"), 
                            tags$div(
                            h3("Who are we creating value for?"),
                            tags$ul(
