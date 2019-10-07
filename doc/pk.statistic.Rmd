@@ -1,0 +1,87 @@
+---
+title: "pk-statistic"
+author: "Jie Jin"
+date: "10/3/2019"
+output: html_document
+---
+
+```{r}
+pk2018 <- read.csv("../data/sqs_pk_fy18_final.csv",T)
+pk2017 <- read.csv("../data/sqs_pk_fy17_final.csv",T)
+pk2016 <- read.csv("../data/sqs_pk_fy17_final.csv",T)
+```
+
+```{r}
+pk2018$Total.ECERS[pk2018$Total.ECERS ==0] <- NA
+pk2017$Total.ECERS[pk2017$Total.ECERS ==0] <- NA
+pk2016$Total.ECERS[pk2016$Total.ECERS ==0] <- NA
+```
+
+```{r}
+library(dplyr)
+meanna <- function(x){
+  return(mean(x,na.rm = T))
+}
+
+maxna <- function(x){
+  return(max(x$Total.ECERS,na.rm = T))
+}
+pkquality <- function(df){
+  return(apply(df[,c("CLASS.Emotional.Support.Score","CLASS.Instructional.Support.Score","Total.ECERS")],2,meanna))
+}
+
+
+```
+
+#split the data according to Zipcode
+```{r}
+pk2018zipcode.split <- split(pk2018,pk2018$Zipcode)
+pk2018zipcode.mean <- sapply(pk2018zipcode.split,pkquality)
+pk2018zipcode.max <- sapply(pk2018zipcode.split,maxna)
+```
+
+
+```{r}
+pk2017zipcode.split <- split(pk2017,pk2017$Zipcode)
+pk2017zipcode.mean <- sapply(pk2017zipcode.split,pkquality)
+pk2017zipcode.max <- sapply(pk2017zipcode.split,maxna)
+```
+
+
+```{r}
+pk2016zipcode.split <- split(pk2016,pk2016$Zipcode)
+pk2016zipcode.mean <- sapply(pk2016zipcode.split,pkquality)
+pk2016zipcode.max <- sapply(pk2016zipcode.split,maxna)
+```
+
+#interaction part: input zipcode
+```{r}
+x <- 10013
+pk2018$Program.Name[pk2018$Total.ECERS==pk2018zipcode.max[which(names(pk2018zipcode.max)==x)]&pk2018$Zipcode==x ]
+#the highest score school name
+pk2018zipcode.max[which(names(pk2018zipcode.max)==x)]
+#the highest score
+pk2018zipcode.mean[,which(colnames(pk2018zipcode.mean)==x)]
+#the zipcode average
+```
+
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
