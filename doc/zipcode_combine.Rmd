@@ -1,0 +1,137 @@
+---
+title: "R Notebook"
+author: "Jiyuan Liu"
+output: html_notebook
+---
+
+load('~/Desktop/5243/Project 2/output/processed_hs_total.RData')
+
+## Summarize the data by zipcode and year of high school
+zipcode.hs <- function(zipcode,yr){
+  zipcode.n <- hs_total %>%
+    filter (X.zip_hs.== zipcode, year == yr) 
+  number <- nrow(zipcode.n)
+  zipcode.summarize <- hs_total %>%
+    filter (X.zip_hs.== zipcode,year== yr) %>%
+    summarize(enroll=sum(`Enrollment`),
+              SASS.mean=mean(`Student Achievement - Section Score`,na.rm = T),
+              RIES.mean=mean(`Rigorous Instruction - Element Score`,na.rm = T),
+              GR.mean=mean(`Metric Value - 4-Year Graduation Rate`,na.rm = T),
+              ES.mean=mean(`Metric Value - Average Regents Score - English (Common Core)`,na.rm = T),
+              GHS.mean=mean(`Metric Value - Average Regents Score - Global History`,na.rm = T),
+              AIS.mean=mean(`Metric Value - Average Regents Score - Algebra I (Common Core)`,na.rm = T),
+              LES.mean=mean(`Metric Value - Average Regents Score - Living Environment`,na.rm = T),
+              RRR.mean=mean(`Metric Value - Average Completion Rate for Remaining Regents`,na.rm = T))
+  hs.zipcode <- cbind(zipcode,yr,number,zipcode.summarize)
+  return(hs.zipcode)
+}
+hs_zipcode <- data.frame()
+for (i in unique(hs_total$X.zip_hs.)) {
+  for (j in unique(hs_total$year)){
+    hs_zipcode <- rbind(hs_zipcode,zipcode.hs(i,j))
+  }
+}
+
+save(hs_zipcode, file="~/Desktop/5243/Project 2/output/processed_hs_zipcode.RData")
+
+## Summarize the data by zipcode and year of elementary school
+load('~/Desktop/5243/Project 2/output/processed_ele_total.RData')
+
+zipcode.ele <- function(zipcode,yr){
+  zipcode.n <- ele_total %>%
+    filter (X.zip.== zipcode, year == yr) 
+  number <- nrow(zipcode.n)
+  zipcode.summarize <- ele_total %>%
+    filter (X.zip.== zipcode,year== yr) %>%
+    summarize(enroll=sum(`Enrollment`),
+              SASS.mean=mean(`Student Achievement - Section Score`,na.rm = T),
+              RIES.mean=mean(`Rigorous Instruction - Element Score`,na.rm = T),
+              ASPELA.mean=mean(`Metric Value - Average Student Proficiency, ELA`,na.rm = T),
+              ASPM.mean=mean(`Metric Value - Average Student Proficiency, Math`,na.rm = T)
+              )
+  ele.zipcode <- cbind(zipcode,yr,number,zipcode.summarize)
+  return(ele.zipcode)
+}
+
+ele_zipcode <- data.frame()
+for (i in unique(ele_total$X.zip.)) {
+  for (j in unique(ele_total$year)){
+    ele_zipcode <- rbind(ele_zipcode,zipcode.ele(i,j))
+  }
+}
+
+save(ele_zipcode, file="~/Desktop/5243/Project 2/output/processed_ele_zipcode.RData")
+
+## Summarize the data by zipcode and year of middle school
+load('~/Desktop/5243/Project 2/output/processed_mid_total.RData')
+
+zipcode.mid <- function(zipcode,yr){
+  zipcode.n <- mid_total %>%
+    filter (X.zip.== zipcode, year == yr) 
+  number <- nrow(zipcode.n)
+  zipcode.summarize <- mid_total %>%
+    filter (X.zip.== zipcode,year== yr) %>%
+    summarize(enroll=sum(`Enrollment`),
+              SASS.mean=mean(`Student Achievement - Section Score`,na.rm = T),
+              RIES.mean=mean(`Rigorous Instruction - Element Score`,na.rm = T),
+              ASPELA.mean=mean(`Metric Value - Average Student Proficiency, ELA`,na.rm = T),
+              ASPM.mean=mean(`Metric Value - Average Student Proficiency, Math`,na.rm = T),
+              EPS.mean=mean(`Metric Value - ELA Core Course Pass Rate`,na.rm = T),
+              MPS.mean=mean(`Metric Value - Math Core Course Pass Rate`,na.rm = T),
+              SPS.mean=mean(`Metric Value - Science Core Course Pass Rate`,na.rm = T),
+              SSPS.mean=mean(`Metric Value - Social Studies Core Course Pass Rate`,na.rm = T),
+              MASPG8.mean=mean(`Metric Value - Average Student Proficiency, Math, Grade 8`,na.rm = T),
+              EASPG8.mean=mean(`Metric Value - Average Student Proficiency, ELA, Grade 8`,na.rm = T),
+              SSPG8.mean=mean(`Metric Value - Average Student Proficiency, Science, Grade 8`,na.rm = T)
+    )
+  mid.zipcode <- cbind(zipcode,yr,number,zipcode.summarize)
+  return(mid.zipcode)
+}
+
+mid_zipcode <- data.frame()
+for (i in unique(mid_total$X.zip.)) {
+  for (j in unique(mid_total$year)){
+    mid_zipcode <- rbind(mid_zipcode,zipcode.mid(i,j))
+  }
+}
+
+save(mid_zipcode, file="~/Desktop/5243/Project 2/output/processed_mid_zipcode.RData")
+
+
+## Summarize the data by zipcode and year of k8 school
+load('~/Desktop/5243/Project 2/output/processed_k_8_total.RData')
+
+zipcode.k_8 <- function(zipcode,yr){
+  zipcode.n <- k_8_total %>%
+    filter (X.zip.== zipcode, year == yr) 
+  number <- nrow(zipcode.n)
+  zipcode.summarize <- k_8_total %>%
+    filter (X.zip.== zipcode,year== yr) %>%
+    summarize(enroll=sum(`Enrollment`),
+              SASS.mean=mean(`Student Achievement - Section Score`,na.rm = T),
+              RIES.mean=mean(`Rigorous Instruction - Element Score`,na.rm = T),
+              ASPELA.mean=mean(`Metric Value - Average Student Proficiency, ELA`,na.rm = T),
+              ASPM.mean=mean(`Metric Value - Average Student Proficiency, Math`,na.rm = T),
+              EPS.mean=mean(`Metric Value - ELA Core Course Pass Rate`,na.rm = T),
+              MPS.mean=mean(`Metric Value - Math Core Course Pass Rate`,na.rm = T),
+              SPS.mean=mean(`Metric Value - Science Core Course Pass Rate`,na.rm = T),
+              SSPS.mean=mean(`Metric Value - Social Studies Core Course Pass Rate`,na.rm = T),
+              MASPG8.mean=mean(`Metric Value - Average Student Proficiency, Math, Grade 8`,na.rm = T),
+              EASPG8.mean=mean(`Metric Value - Average Student Proficiency, ELA, Grade 8`,na.rm = T),
+              SSPG8.mean=mean(`Metric Value - Average Student Proficiency, Science, Grade 8`,na.rm = T)
+    )
+  k_8.zipcode <- cbind(zipcode,yr,number,zipcode.summarize)
+  return(k_8.zipcode)
+}
+
+k_8_zipcode <- data.frame()
+for (i in unique(k_8_total$X.zip.)) {
+  for (j in unique(k_8_total$year)){
+    mid_zipcode <- rbind(k_8_zipcode,zipcode.k_8(i,j))
+  }
+}
+
+save(k_8_zipcode, file="~/Desktop/5243/Project 2/output/processed_k_8_zipcode.RData")
+
+
+

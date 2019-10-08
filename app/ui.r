@@ -7,7 +7,7 @@ library(leaflet)
 library(shinythemes)
 # Need a better name for the app
 shinyUI(fluidPage
-    (theme = shinytheme("cerulean"),
+    (theme = shinytheme("flatly"),
     navbarPage(
         "District Education Quality Assesment tool",
                tabPanel(
