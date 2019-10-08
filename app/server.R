@@ -48,7 +48,7 @@ shinyServer(function(input, output) {
   
     # simple map
     output$map <- renderLeaflet({
-      leaflet(zipcode) %>%
+      leaflet() %>%
         addProviderTiles(providers$Stamen.TonerLite,
                          options = providerTileOptions(noWrap = TRUE)) %>%
         setView(-73.983,40.7639,zoom = 12) %>% 
