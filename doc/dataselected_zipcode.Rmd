@@ -1,0 +1,421 @@
+---
+title: "R Notebook"
+author: "Jiyuan Liu"
+output: html_notebook
+---
+
+library(dplyr)
+library(ggplot2)
+
+X2016_hs_summary <- read_excel("~/Desktop/5243/Project 2/data/2016_hs.xlsx",1)
+X2016_hs_stuachi <- read_excel("~/Desktop/5243/Project 2/data/2016_hs.xlsx",2)
+X2016_hs_founda <- read_excel("~/Desktop/5243/Project 2/data/2016_hs.xlsx",4)
+
+X2017_hs_summary <- read_excel("~/Desktop/5243/Project 2/data/2017_hs.xlsx",1)
+X2017_hs_stuachi <- read_excel("~/Desktop/5243/Project 2/data/2017_hs.xlsx",2)
+X2017_hs_founda <- read_excel("~/Desktop/5243/Project 2/data/2017_hs.xlsx",4)
+
+X2018_hs_summary <- read_excel("~/Desktop/5243/Project 2/data/2018_hs.xlsx",1)
+X2018_hs_stuachi <- read_excel("~/Desktop/5243/Project 2/data/2018_hs.xlsx",2)
+X2018_hs_founda <- read_excel("~/Desktop/5243/Project 2/data/2018_hs.xlsx",4)
+X2018_hs_addi <- read_excel("~/Desktop/5243/Project 2/data/2018_hs.xlsx",5)
+
+## Extract the information needed
+X2016_hs_summary <- X2016_hs_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Average Grade 8 English Proficiency","Average Grade 8 Math Proficiency",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White")
+X2016_hs_stuachi <- X2016_hs_stuachi %>%
+  select("Student Achievement - Section Score","Metric Value - Graduation Rate, 4 year",
+         "Metric Value - Average Regents Score - English (Common Core)", "Metric Value - Average Regents Score - Global History" ,
+         "Metric Value - Average Regents Score - Algebra I (Common Core)", "Metric Value - Average Regents Score - Living Environment",
+         "Metric Value - Average Completion Rate for Remaining Regents" )
+X2016_hs_founda <- X2016_hs_founda %>%
+  select("Rigorous Instruction - Element Score" )
+year<-rep(2016,times=nrow(X2016_hs_founda))
+SAT1 <- rep(NA,times=nrow(X2016_hs_founda))
+SAT2 <- rep(NA,times=nrow(X2016_hs_founda))
+X2016_hs <- cbind(year,X2016_hs_summary,X2016_hs_stuachi,X2016_hs_founda,SAT1,SAT2)
+
+
+
+X2017_hs_summary <- X2017_hs_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Average Grade 8 English Proficiency","Average Grade 8 Math Proficiency",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White")
+X2017_hs_stuachi <- X2017_hs_stuachi %>%
+  select("Student Achievement - Section Score","Metric Value - 4-Year Graduation Rate" ,
+         "Metric Value - Average Regents Score - English (Common Core)", "Metric Value - Average Regents Score - Global History" ,
+         "Metric Value - Average Regents Score - Algebra I (Common Core)", "Metric Value - Average Regents Score - Living Environment",
+         "Metric Value - Average Completion Rate for Remaining Regents" )
+X2017_hs_founda <- X2017_hs_founda %>%
+  select("Rigorous Instruction - Element Score" )
+year<-rep(2017,times=nrow(X2017_hs_founda))
+SAT1 <- rep(NA,times=nrow(X2017_hs_founda))
+SAT2 <- rep(NA,times=nrow(X2017_hs_founda))
+X2017_hs <- cbind(year,X2017_hs_summary[-459,],X2017_hs_stuachi[-459,],X2017_hs_founda,SAT1,SAT2)
+
+
+X2018_hs_summary <- X2018_hs_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Average Grade 8 English Proficiency","Average Grade 8 Math Proficiency",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White")
+X2018_hs_stuachi <- X2018_hs_stuachi %>%
+  select("Student Achievement - Section Score","Metric Value - 4-Year Graduation Rate" ,
+         "Metric Value - Average Regents Score - English (Common Core)", "Metric Value - Average Regents Score - Global History" ,
+         "Metric Value - Average Regents Score - Algebra I (Common Core)", "Metric Value - Average Regents Score - Living Environment",
+         "Metric Value - Average Completion Rate for Remaining Regents" )
+X2018_hs_founda <- X2018_hs_founda %>%
+  select("Rigorous Instruction - Element Score" )
+X2018_hs_addi <- X2018_hs_addi %>%
+  select("Metric Value - Average score of students in the current cohort who took the SAT Math exam",
+         "Metric Value - Average score of students in the current cohort who took the SAT Reading and Writing exam")
+year<-rep(2018,times=nrow(X2018_hs_founda))
+
+X2018_hs <- cbind(year,X2018_hs_summary[c(-461,-477),],X2018_hs_stuachi[c(-461,-477),],X2018_hs_founda,X2018_hs_addi[c(-461,-477),])
+
+hs_total <- rbind(X2018_hs,setNames(X2017_hs,names(X2018_hs)),setNames(X2016_hs,names(X2018_hs)))
+
+hs_coord_zip <- read.csv("~/Desktop/5243/Project 2/output/hs_coord_zip.csv")
+hs_total <- merge(hs_total, hs_coord_zip, by.x="School Name", by.y="X.hs.")
+save(hs_total, file="~/Desktop/5243/Project 2/output/processed_hs_total.RData")
+
+
+X2016_ems_summary <- read_excel("~/Desktop/5243/Project 2/data/2016_ems.xlsx",1)
+X2016_ele_summary <- X2016_ems_summary %>%
+  filter(`School Type`=="Elementary")
+X2016_mid_summary <- X2016_ems_summary %>%
+  filter(`School Type`=="Middle")
+X2016_k_8_summary <- X2016_ems_summary %>%
+  filter(`School Type`=="K-8")
+
+X2016_ems_stuachi <- read_excel("~/Desktop/5243/Project 2/data/2016_ems.xlsx",2)
+X2016_ele_stuachi <- X2016_ems_stuachi %>%
+  filter(`School Type`=="Elementary")
+X2016_mid_stuachi <- X2016_ems_stuachi %>%
+  filter(`School Type`=="Middle")
+X2016_k_8_stuachi <- X2016_ems_stuachi %>%
+  filter(`School Type`=="K-8")
+
+X2016_ems_founda <- read_excel("~/Desktop/5243/Project 2/data/2016_ems.xlsx",4)
+X2016_ele_founda <- X2016_ems_founda %>%
+  filter(`School Type`=="Elementary")
+X2016_mid_founda <- X2016_ems_founda %>%
+  filter(`School Type`=="Middle")
+X2016_k_8_founda <- X2016_ems_founda %>%
+  filter(`School Type`=="K-8")
+
+X2016_ems_addi <- read_excel("~/Desktop/5243/Project 2/data/2016_ems.xlsx",5)
+X2016_mid_addi <- X2016_ems_addi %>%
+  filter(`School Type`=="Middle")
+X2016_k_8_addi <- X2016_ems_addi %>%
+  filter(`School Type`=="K-8")
+
+
+
+## Extract the information needed 2016
+X2016_ele_summary <- X2016_ele_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White")
+X2016_mid_summary <- X2016_mid_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White",
+         "Average Grade 5 English Proficiency","Average Grade 5 Math Proficiency")
+X2016_k_8_summary <- X2016_k_8_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White")
+
+X2016_ele_stuachi <- X2016_ele_stuachi %>%
+  select("Student Achievement - Section Score",
+         "Metric Value - Average Student Proficiency, English",
+         "Metric Value - Average Student Proficiency, Math",)
+X2016_mid_stuachi <- X2016_mid_stuachi %>%
+  select("Student Achievement - Section Score",
+         "Metric Value - Average Student Proficiency, English",
+         "Metric Value - Average Student Proficiency, Math",
+         "Metric Value - Middle School Core English Pass Rate" ,
+         "Metric Value - Middle School Core Math Pass Rate",
+         "Metric Value - Middle School Core Science Pass Rate",
+         "Metric Value - Middle School Core Social Studies Pass Rate" 
+         )
+X2016_k_8_stuachi <- X2016_k_8_stuachi %>%
+  select("Student Achievement - Section Score",
+         "Metric Value - Average Student Proficiency, English",
+         "Metric Value - Average Student Proficiency, Math",
+         "Metric Value - Middle School Core English Pass Rate" ,
+         "Metric Value - Middle School Core Math Pass Rate",
+         "Metric Value - Middle School Core Science Pass Rate",
+         "Metric Value - Middle School Core Social Studies Pass Rate")
+
+X2016_ele_founda <- X2016_ele_founda %>%
+  select("Rigorous Instruction - Element Score" )
+X2016_mid_founda <- X2016_mid_founda %>%
+  select("Rigorous Instruction - Element Score" )
+X2016_k_8_founda <- X2016_k_8_founda %>%
+  select("Rigorous Instruction - Element Score" )
+
+X2016_mid_addi <- X2016_mid_addi %>%
+  select("Math - 8th Grade - Average Student Proficiency",
+         "ELA - 8th Grade - Average Student Proficiency",
+         "Science - 8th Grade - Average Student Proficiency")
+X2016_k_8_addi <- X2016_k_8_addi %>%
+  select("Math - 8th Grade - Average Student Proficiency",
+         "ELA - 8th Grade - Average Student Proficiency",
+         "Science - 8th Grade - Average Student Proficiency")
+
+year<-rep(2016,times=nrow(X2016_ele_summary))
+X2016_ele <- cbind(year,X2016_ele_summary,X2016_ele_stuachi,X2016_ele_founda)
+year<-rep(2016,times=nrow(X2016_mid_summary))
+X2016_mid <- cbind(year,X2016_mid_summary,X2016_mid_stuachi,X2016_mid_founda,X2016_mid_addi)
+year<-rep(2016,times=nrow(X2016_k_8_summary))
+X2016_k_8 <- cbind(year,X2016_k_8_summary,X2016_k_8_stuachi,X2016_k_8_founda,X2016_k_8_addi)
+
+X2017_ems_summary <- read_excel("~/Desktop/5243/Project 2/data/2017_ems.xlsx",1)
+X2017_ele_summary <- X2017_ems_summary %>%
+  filter(`School Type`=="Elementary")
+X2017_mid_summary <- X2017_ems_summary %>%
+  filter(`School Type`=="Middle")
+X2017_k_8_summary <- X2017_ems_summary %>%
+  filter(`School Type`=="K-8")
+
+X2017_ems_stuachi <- read_excel("~/Desktop/5243/Project 2/data/2017_ems.xlsx",2)
+X2017_ele_stuachi <- X2017_ems_stuachi %>%
+  filter(`School Type`=="Elementary")
+X2017_mid_stuachi <- X2017_ems_stuachi %>%
+  filter(`School Type`=="Middle")
+X2017_k_8_stuachi <- X2017_ems_stuachi %>%
+  filter(`School Type`=="K-8")
+
+X2017_ems_founda <- read_excel("~/Desktop/5243/Project 2/data/2017_ems.xlsx",4)
+X2017_ele_founda <- X2017_ems_founda %>%
+  filter(`School Type`=="Elementary")
+X2017_mid_founda <- X2017_ems_founda %>%
+  filter(`School Type`=="Middle")
+X2017_k_8_founda <- X2017_ems_founda %>%
+  filter(`School Type`=="K-8")
+
+X2017_ems_addi <- read_excel("~/Desktop/5243/Project 2/data/2017_ems.xlsx",5)
+X2017_mid_addi <- X2017_ems_addi %>%
+  filter(`School Type`=="Middle")
+X2017_k_8_addi <- X2017_ems_addi %>%
+  filter(`School Type`=="K-8")
+
+
+
+## Extract the information needed 2017
+X2017_ele_summary <- X2017_ele_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White")
+X2017_mid_summary <- X2017_mid_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White",
+         "Average Incoming ELA Proficiency (Based on 4th Grade)",
+         "Average Incoming Math Proficiency (Based on 4th Grade)" )
+X2017_k_8_summary <- X2017_k_8_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White")
+
+X2017_ele_stuachi <- X2017_ele_stuachi %>%
+  select("Student Achievement - Section Score",
+         "Metric Value - Average Student Proficiency, ELA",
+         "Metric Value - Average Student Proficiency, Math")
+X2017_mid_stuachi <- X2017_mid_stuachi %>%
+  select("Student Achievement - Section Score",
+         "Metric Value - Average Student Proficiency, ELA",
+         "Metric Value - Average Student Proficiency, Math",
+         "Metric Value - ELA Core Course Pass Rate"  ,
+         "Metric Value - Math Core Course Pass Rate",
+         "Metric Value - Science Core Course Pass Rate",
+         "Metric Value - Social Studies Core Course Pass Rate" 
+  )
+X2017_k_8_stuachi <- X2017_k_8_stuachi %>%
+  select("Student Achievement - Section Score",
+         "Metric Value - Average Student Proficiency, ELA",
+         "Metric Value - Average Student Proficiency, Math",
+         "Metric Value - ELA Core Course Pass Rate"  ,
+         "Metric Value - Math Core Course Pass Rate",
+         "Metric Value - Science Core Course Pass Rate",
+         "Metric Value - Social Studies Core Course Pass Rate")
+
+X2017_ele_founda <- X2017_ele_founda %>%
+  select("Rigorous Instruction - Element Score" )
+X2017_mid_founda <- X2017_mid_founda %>%
+  select("Rigorous Instruction - Element Score" )
+X2017_k_8_founda <- X2017_k_8_founda %>%
+  select("Rigorous Instruction - Element Score" )
+
+X2017_mid_addi <- X2017_mid_addi %>%
+  select("Metric Value - Math - 8th Grade - Average Student Proficiency",
+         "Metric Value - ELA - 8th Grade - Average Student Proficiency",
+         "Metric Value - Science - 8th Grade - Average Student Proficiency")
+X2017_k_8_addi <- X2017_k_8_addi %>%
+  select("Metric Value - Math - 8th Grade - Average Student Proficiency",
+         "Metric Value - ELA - 8th Grade - Average Student Proficiency",
+         "Metric Value - Science - 8th Grade - Average Student Proficiency")
+
+year<-rep(2017,times=nrow(X2017_ele_summary))
+X2017_ele <- cbind(year,X2017_ele_summary,X2017_ele_stuachi,X2017_ele_founda)
+year<-rep(2017,times=nrow(X2017_mid_summary))
+X2017_mid <- cbind(year,X2017_mid_summary,X2017_mid_stuachi,X2017_mid_founda,X2017_mid_addi)
+year<-rep(2017,times=nrow(X2017_k_8_founda))
+X2017_k_8 <- cbind(year,X2017_k_8_summary[c(-167,-184),],X2017_k_8_stuachi[c(-167,-184),],X2017_k_8_founda,X2017_k_8_addi[c(-167,-184),])
+
+
+
+
+X2018_ems_summary <- read_excel("~/Desktop/5243/Project 2/data/2018_ems.xlsx",1)
+X2018_ele_summary <- X2018_ems_summary %>%
+  filter(`School Type`=="Elementary")
+X2018_mid_summary <- X2018_ems_summary %>%
+  filter(`School Type`=="Middle")
+X2018_k_8_summary <- X2018_ems_summary %>%
+  filter(`School Type`=="K-8")
+
+X2018_ems_stuachi <- read_excel("~/Desktop/5243/Project 2/data/2018_ems.xlsx",2)
+X2018_ele_stuachi <- X2018_ems_stuachi %>%
+  filter(`School Type`=="Elementary")
+X2018_mid_stuachi <- X2018_ems_stuachi %>%
+  filter(`School Type`=="Middle")
+X2018_k_8_stuachi <- X2018_ems_stuachi %>%
+  filter(`School Type`=="K-8")
+
+X2018_ems_founda <- read_excel("~/Desktop/5243/Project 2/data/2018_ems.xlsx",4)
+X2018_ele_founda <- X2018_ems_founda %>%
+  filter(`School Type`=="Elementary")
+X2018_mid_founda <- X2018_ems_founda %>%
+  filter(`School Type`=="Middle")
+X2018_k_8_founda <- X2018_ems_founda %>%
+  filter(`School Type`=="K-8")
+
+X2018_ems_addi <- read_excel("~/Desktop/5243/Project 2/data/2018_ems.xlsx",5)
+X2018_mid_addi <- X2018_ems_addi %>%
+  filter(`School Type`=="Middle")
+X2018_k_8_addi <- X2018_ems_addi %>%
+  filter(`School Type`=="K-8")
+
+
+
+## Extract the information needed 2017
+X2018_ele_summary <- X2018_ele_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White")
+X2018_mid_summary <- X2018_mid_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White",
+         "Average Incoming ELA Proficiency (Based on 5th Grade)",
+         "Average Incoming Math Proficiency (Based on 5th Grade)" )
+X2018_k_8_summary <- X2018_k_8_summary %>%
+  select("School Name",
+         "School Type","Enrollment",
+         "Rigorous Instruction - Percent Positive","Collaborative Teachers - Percent Positive",
+         "Supportive Environment - Percent Positive","Effective School Leadership - Percent Positive",
+         "Strong Family-Community Ties - Percent Positive","Trust - Percent Positive",
+         "Percent Asian","Percent Black","Percent Hispanic","Percent White")
+
+X2018_ele_stuachi <- X2018_ele_stuachi %>%
+  select("Student Achievement - Section Score",
+         "Metric Value - Average Student Proficiency, ELA",
+         "Metric Value - Average Student Proficiency, Math")
+X2018_mid_stuachi <- X2018_mid_stuachi %>%
+  select("Student Achievement - Section Score",
+         "Metric Value - Average Student Proficiency, ELA",
+         "Metric Value - Average Student Proficiency, Math",
+         "Metric Value - ELA Core Course Pass Rate"  ,
+         "Metric Value - Math Core Course Pass Rate",
+         "Metric Value - Science Core Course Pass Rate",
+         "Metric Value - Social Studies Core Course Pass Rate" 
+  )
+X2018_k_8_stuachi <- X2018_k_8_stuachi %>%
+  select("Student Achievement - Section Score",
+         "Metric Value - Average Student Proficiency, ELA",
+         "Metric Value - Average Student Proficiency, Math",
+         "Metric Value - ELA Core Course Pass Rate"  ,
+         "Metric Value - Math Core Course Pass Rate",
+         "Metric Value - Science Core Course Pass Rate",
+         "Metric Value - Social Studies Core Course Pass Rate")
+
+X2018_ele_founda <- X2018_ele_founda %>%
+  select("Rigorous Instruction - Element Score" )
+X2018_mid_founda <- X2018_mid_founda %>%
+  select("Rigorous Instruction - Element Score" )
+X2018_k_8_founda <- X2018_k_8_founda %>%
+  select("Rigorous Instruction - Element Score" )
+
+X2018_mid_addi <- X2018_mid_addi %>%
+  select("Metric Value - Average Student Proficiency, Math, Grade 8",
+         "Metric Value - Average Student Proficiency, ELA, Grade 8",
+         "Metric Value - Average Student Proficiency, Science, Grade 8")
+X2018_k_8_addi <- X2018_k_8_addi %>%
+  select("Metric Value - Average Student Proficiency, Math, Grade 8",
+         "Metric Value - Average Student Proficiency, ELA, Grade 8",
+         "Metric Value - Average Student Proficiency, Science, Grade 8")
+
+year<-rep(2018,times=nrow(X2018_ele_founda))
+X2018_ele <- cbind(year,X2018_ele_summary[c(-631,-632,-667),],X2018_ele_stuachi[c(-631,-632,-667),],X2018_ele_founda)
+year<-rep(2018,times=nrow(X2018_mid_founda))
+X2018_mid <- cbind(year,X2018_mid_summary[c(-357),],X2018_mid_stuachi[c(-357),],X2018_mid_founda,X2018_mid_addi[c(-357),])
+year<-rep(2018,times=nrow(X2018_k_8_founda))
+X2018_k_8 <- cbind(year,X2018_k_8_summary[c(-166,-187,-212,-216,-222,-226),],X2018_k_8_stuachi[c(-166,-187,-212,-216,-222,-226),],
+                   X2018_k_8_founda,X2018_k_8_addi[c(-166,-187,-212,-216,-222,-226),])
+
+ele_total <- rbind(X2018_ele,setNames(X2017_ele,names(X2018_ele)),setNames(X2016_ele,names(X2018_ele)))
+mid_total <- rbind(X2018_mid,setNames(X2017_mid,names(X2018_mid)),setNames(X2016_mid,names(X2018_mid)))
+k_8_total <- rbind(X2018_k_8,setNames(X2017_k_8,names(X2018_k_8)),setNames(X2016_k_8,names(X2018_k_8)))
+
+ems_coord_zip <- read.csv("~/Desktop/5243/Project 2/output/ems_coord_zip.csv")
+
+ele_total <- merge(ele_total, ems_coord_zip, by.x="School Name", by.y="X.ems.")
+save(ele_total, file="~/Desktop/5243/Project 2/output/processed_ele_total.RData")
+
+mid_total <- merge(mid_total, ems_coord_zip, by.x="School Name", by.y="X.ems.")
+save(mid_total, file="~/Desktop/5243/Project 2/output/processed_mid_total.RData")
+
+k_8_total <- merge(k_8_total, ems_coord_zip, by.x="School Name", by.y="X.ems.")
+save(k_8_total, file="~/Desktop/5243/Project 2/output/processed_k_8_total.RData")
+
+
+
