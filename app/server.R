@@ -24,6 +24,7 @@ shinyServer(function(input, output) {
   pk2016<-read.csv("../output/2016pkdata.final.csv")
   pk2017<-read.csv("../output/2017pkdata.final.csv")
   
+  
   # simple map
   output$num_schools_map <- renderLeaflet({
     
@@ -204,7 +205,9 @@ shinyServer(function(input, output) {
     
   })
   
-  #pre_k_map
+
+####################################### Pre-K School ###########################################
+  # pre-k map
   output$pre_k_map <- renderLeaflet({
     if(input$pre_k_year=="2016"){
       selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% pk2016$Zipcode)
@@ -443,9 +446,14 @@ shinyServer(function(input, output) {
   
     
   })
+ 
+########################################## Other School Map #####################################
+  
+
   
   output$grade_map <- renderLeaflet({
     
+    # data preparation
     if (input$`school type` == "Elementary"){
       selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(ele_zipcode$zipcode))
       # ----- Transform to EPSG 4326 - WGS84 (required)
@@ -499,6 +507,7 @@ shinyServer(function(input, output) {
       domain <- subdat_data$RIES.mean
     )
     
+################# Map Drawing 
     leaflet() %>%
       addProviderTiles(providers$Stamen.TonerLite,
                        options = providerTileOptions(noWrap = TRUE)) %>%

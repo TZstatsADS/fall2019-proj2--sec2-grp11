@@ -61,7 +61,7 @@ shinyUI(fluidPage
                      sidebarPanel(radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
                                                choices=c(2016, 2017, 2018), inline = TRUE),
                                   tags$hr(),
-                                  textInput("text", "Explore the schools in a zip code:", 
+                                  textInput("zip_pk", "Explore the schools in a zip code:", 
                                             value = ""),
                                   tags$hr(),
                                   sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
@@ -81,7 +81,7 @@ shinyUI(fluidPage
                                   radioButtons(inputId="gd_year", label="Select the year you want data for:", 
                                                choices=c(2016, 2017, 2018), inline = TRUE),
                                   tags$hr(),
-                                  textInput("text", "Explore the schools in a zip code:", 
+                                  textInput("zip_s", "Explore the schools in a zip code:", 
                                             value = ""),
                                   tags$hr(),
                                   sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
