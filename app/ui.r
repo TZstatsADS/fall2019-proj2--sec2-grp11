@@ -21,7 +21,7 @@ shinyUI(fluidPage
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                            ),
-                           leafletOutput("map"), 
+                           leafletOutput("num_schools_map"), 
                            tags$div(
                            h3("Who are we creating value for?"),
                            tags$ul(
@@ -64,7 +64,8 @@ shinyUI(fluidPage
                                      selectInput("pre_k_metric", "Evaluation Metric:",
                                                  c("Enrollment" = "Enrollment",
                                                    "Emotional Support" = "CLASS Emotional Support Score",
-                                                   "Instruction Quality" = "CLASS Instructional Support Score"
+                                                   "Instruction Quality" = "CLASS Instructional Support Score",
+                                                   "Total Academic Score" = "Total.ECERS"
                                                  )
                                      ),
                                      tags$hr(),
@@ -89,12 +90,9 @@ shinyUI(fluidPage
                                                   choices=c(2016, 2017, 2018), inline = TRUE),
                                      tags$hr(),
                                      selectInput("elem_metric", "Evaluation Metric:",
-                                                 c("Enrollment" = "Enrollment",
-                                                   "Overall Academic Achievement" = "Student Achievement - Section Score",
-                                                   "Supportive Environment" = "Supportive Environment - Element Score",
-                                                   "Average Student English Proficiency" = "Average Grade 8 English Proficiency",
-                                                   "Average Student Math Proficiency" = "Average Grade 8 Math Proficiency",
-                                                   "Average Student Science Proficiency" = "Average Grade 8 Science Proficiency"
+                                                 c("Enrollment" = "enroll",
+                                                   "Student Achievement" = "SASS.mean",
+                                                   "Rigorous Instruction" = "RIES.mean"
                                                  )
                                      ),
                                      tags$hr(),

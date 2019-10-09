@@ -2,4 +2,4 @@
 
 ### Doc folder
 
-The doc directory contains the report or presentation files. It can have subfolders.  
+The doc directory contains the report or presentation files. It can have subfolders. It also has intermediate files that do some of the analysis necessary for the app. 

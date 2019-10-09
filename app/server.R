@@ -43,7 +43,7 @@ shinyServer(function(input, output) {
   
   
     # simple map
-    output$map <- renderLeaflet({
+    output$num_schools_map <- renderLeaflet({
       leaflet() %>%
         addProviderTiles(providers$Stamen.TonerLite,
                          options = providerTileOptions(noWrap = TRUE)) %>%
