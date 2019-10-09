@@ -21,7 +21,7 @@ shinyUI(fluidPage
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                            ),
-                           leafletOutput("num_schools_map"), 
+                           leafletOutput("num_schools_map", height = 600), 
                            "This map displays the number of schools in each zip code. Darker colors indicate more schools.",
                            tags$div(
                            h3("Who are we creating value for?"),
@@ -79,7 +79,7 @@ shinyUI(fluidPage
                                      sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                         ),
                         mainPanel( 
-                        leafletOutput("pre_k_map")
+                        leafletOutput("pre_k_map", height = 600)
                         )
                         ),
                tabPanel("Grade Schools",
@@ -106,7 +106,7 @@ shinyUI(fluidPage
                                      sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                         ),
                         mainPanel( 
-                        leafletOutput("grade_map"))
+                        leafletOutput("grade_map", height = 600))
                         )
     )
 ))
