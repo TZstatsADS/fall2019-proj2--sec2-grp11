@@ -56,7 +56,8 @@ shinyUI(fluidPage
                   p("The tool allows users to see a summary of the schools of each zip code in New York's 5 
                               borough for many different metrics. Since schools vary drastically 
                               depending on what grades they serve, the different age schools are 
-                              on different tabs. In addition, users are able to query by year. ")
+                              on different tabs. In addition, users are able to query by year. If a user queries a specific 
+                              zip code then they can observe the top schools in that zip code by the metric. ")
                 )
               )
             ),
@@ -64,8 +65,9 @@ shinyUI(fluidPage
                      sidebarPanel(radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
                                                choices=c(2016, 2017, 2018), inline = TRUE),
                                   tags$hr(),
-                                  textInput("text", "Explore the schools in a zip code:", 
+                                  textInput("pre_k_text", "Explore the schools in a zip code:", 
                                             value = ""),
+                                  actionButton('pre_k_submit', "Submit", icon = NULL, width = NULL),
                                   tags$hr(),
                                   sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                      ),
@@ -84,8 +86,9 @@ shinyUI(fluidPage
                                   radioButtons(inputId="gd_year", label="Select the year you want data for:", 
                                                choices=c(2016, 2017, 2018), inline = TRUE),
                                   tags$hr(),
-                                  textInput("text", "Explore the schools in a zip code:", 
+                                  textInput("gd_text", "Explore the schools in a zip code:", 
                                             value = ""),
+                                  actionButton('gd_submit', "Submit", icon = NULL, width = NULL),
                                   tags$hr(),
                                   sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                      ),
