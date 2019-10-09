@@ -13,20 +13,6 @@ shinyUI(fluidPage
         "District Education Quality Assesment tool",
                tabPanel(
                    "Introduction",
-                   sidebarLayout(
-                       position = "left",
-                       sidebarPanel("Select the year you want data for:",
-                                    checkboxGroupInput("checkGroup", 
-                                                       h3("Year"), 
-                                                       choices = list("2016" = 2016, 
-                                                                      "2017" = 2017, 
-                                                                      "2018" = 2018),
-                                                       selected = 1),
-                                    tags$hr(),
-                                       textInput("text", h6("Select zipcode you want data for:"), 
-                                                     value = "")   
-                              
-                       ),
                        mainPanel( 
                            tags$div(
                            h1("** insert name of tool **"),
@@ -52,37 +38,33 @@ shinyUI(fluidPage
                                tags$li("Elementary schools"),
                                tags$li("High schools")
                            )
-                           )
-                   )
-               )),
-               tabPanel("How *tool name* works", 
-                        mainPanel(
-                          tags$div(
-                            h1("** insert name of tool **"),
-                            h3("The Data"),
-                            p("This dataset comes from the NYC department of education. It includes information about 
+                           ),
+                           tags$div(
+                             h2("How **tool ** works"),
+                             h3("The Data"),
+                             p("This dataset comes from the NYC department of education. It includes information about 
                               school emotional support, organization, teacher approval, as well as student performance 
                               after pre-k. While the released dataset includes information from 2014-2015 school year 
                               until the 2017-2018 school year, the first year is incomplete so only 
                               the three most recent years are used.")
-                          ),
-                          tags$div(
-                          h3("Functionalities"),
-                          p("The tool allows users to see a summary of the schools of each zip code in New York's 5 
+                           ),
+                           tags$div(
+                             h3("Functionalities"),
+                             p("The tool allows users to see a summary of the schools of each zip code in New York's 5 
                               borough for many different metrics. Since schools vary drastically 
                               depending on what grades they serve, the different age schools are 
                               on different tabs. In addition, users are able to query by year. ")
-                          )
-                        )
-                      ),
+                           )
+                   )
+               ),
                tabPanel("Pre-K schools",
                         sidebarPanel("Select the year you want data for:",
-                                     checkboxGroupInput("checkGroup", 
+                                     checkboxGroupInput("pre_k_year", 
                                                         h3("Year"), 
                                                         choices = list("2016" = 2016, 
                                                                        "2017" = 2017, 
                                                                        "2018" = 2018),
-                                                        selected = 1),
+                                                        selected = 2018),
                                      tags$hr(),
                                      selectInput("pre_k_metric", "Evaluation Metric:",
                                                  c("Enrollment" = "Enrollment",
@@ -100,12 +82,12 @@ shinyUI(fluidPage
                         ),
                tabPanel("Elementary School",
                         sidebarPanel("Select the year you want data for:",
-                                     checkboxGroupInput("checkGroup", 
+                                     checkboxGroupInput("el_year", 
                                                         h3("Year"), 
                                                         choices = list("2016" = 2016, 
                                                                        "2017" = 2017, 
                                                                        "2018" = 2018),
-                                                        selected = 1),
+                                                        selected = 2018),
                                      tags$hr(),
                                      selectInput("elem_metric", "Evaluation Metric:",
                                                  c("Enrollment" = "Enrollment",
@@ -125,13 +107,13 @@ shinyUI(fluidPage
                         ),
                tabPanel("High School",
                         sidebarPanel("Select the year you want data for:",
-                                     checkboxGroupInput("checkGroup", 
+                                     checkboxGroupInput("hs_year", 
                                                         h3("Year"), 
                                                         choices = list("2016" = 2016, 
                                                                        "2017" = 2017, 
                                                                        "2018" = 2018),
-                                                        selected = 1),
-                                     tags$hr(),
+                                                        selected = 2018),
+
                                      selectInput("hs_metric", "Evaluation Metric:",
                                                  c("Enrollment" = "Enrollment",
                                                    "Average SAT Scores" = "Average SAT Score",
