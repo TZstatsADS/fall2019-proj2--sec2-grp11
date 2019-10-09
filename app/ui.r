@@ -57,14 +57,9 @@ shinyUI(fluidPage
                            )
                    )
                ),
-               tabPanel("Pre-K schools",
-                        sidebarPanel("Select the year you want data for:",
-                                     checkboxGroupInput("pre_k_year", 
-                                                        h3("Year"), 
-                                                        choices = list("2016" = 2016, 
-                                                                       "2017" = 2017, 
-                                                                       "2018" = 2018),
-                                                        selected = 2018),
+               tabPanel("Pre-K Schools",
+                        sidebarPanel(radioButtons(inputId="year_choice", label="Select the year you want data for:", 
+                                                  choices=c(2016, 2017, 2018), inline = TRUE),
                                      tags$hr(),
                                      selectInput("pre_k_metric", "Evaluation Metric:",
                                                  c("Enrollment" = "Enrollment",
@@ -73,21 +68,25 @@ shinyUI(fluidPage
                                                  )
                                      ),
                                      tags$hr(),
-                                     textInput("text", h6("Select zipcode you want data for:"), 
-                                               value = "")
+                                     textInput("text", "Explore the schools in a zip code:", 
+                                               value = ""),
+                                     tags$hr(),
+                                     sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                         ),
                         mainPanel( 
                         leafletOutput("pre_k_map")
                         )
                         ),
-               tabPanel("Elementary School",
-                        sidebarPanel("Select the year you want data for:",
-                                     checkboxGroupInput("el_year", 
-                                                        h3("Year"), 
-                                                        choices = list("2016" = 2016, 
-                                                                       "2017" = 2017, 
-                                                                       "2018" = 2018),
-                                                        selected = 2018),
+               tabPanel("Grade Schools",
+                        sidebarPanel(radioButtons("school type", label="Type of school:",
+                                                        choices = c("Elementary" = "Elementary", 
+                                                                       "Middle" = "Middle", 
+                                                                       "K-8" = "K-8",
+                                                                       "High School" = "High School"),
+                                                        selected = "Elementary", inline = TRUE),
+                                     tags$hr(),
+                                     radioButtons(inputId="year_choice", label="Select the year you want data for:", 
+                                                  choices=c(2016, 2017, 2018), inline = TRUE),
                                      tags$hr(),
                                      selectInput("elem_metric", "Evaluation Metric:",
                                                  c("Enrollment" = "Enrollment",
@@ -99,36 +98,13 @@ shinyUI(fluidPage
                                                  )
                                      ),
                                      tags$hr(),
-                                     textInput("text", h6("Select zipcode you want data for:"), 
-                                               value = "")
-                        ),
-                        mainPanel( 
-                        leafletOutput("el_map"))
-                        ),
-               tabPanel("High School",
-                        sidebarPanel("Select the year you want data for:",
-                                     checkboxGroupInput("hs_year", 
-                                                        h3("Year"), 
-                                                        choices = list("2016" = 2016, 
-                                                                       "2017" = 2017, 
-                                                                       "2018" = 2018),
-                                                        selected = 2018),
-
-                                     selectInput("hs_metric", "Evaluation Metric:",
-                                                 c("Enrollment" = "Enrollment",
-                                                   "Average SAT Scores" = "Average SAT Score",
-                                                   "Supportive Environment" = "Supportive Environment - Element Score",
-                                                   "Average Student English Proficiency" = "Average Grade 8 English Proficiency",
-                                                   "Average Student Math Proficiency" = "Average Grade 8 Math Proficiency",
-                                                   "Average Student Science Proficiency" = "Average Grade 8 Science Proficiency"
-                                                 )
-                                     ),
+                                     textInput("text", "Explore the schools in a zip code:", 
+                                               value = ""),
                                      tags$hr(),
-                                     textInput("text", h6("Select zipcode you want data for:"), 
-                                               value = "")   
+                                     sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                         ),
                         mainPanel( 
-                        leafletOutput("hs_map"))
+                        leafletOutput("grade_map"))
                         )
     )
 ))
