@@ -41,10 +41,6 @@ shinyServer(function(input, output) {
     domain = subdat$POPULATION
   )
   
-
-  
-  
-  
   
     # simple map
     output$map <- renderLeaflet({
@@ -61,11 +57,59 @@ shinyServer(function(input, output) {
                      highlight = highlightOptions(weight = 3,
                                                   color = "red",
                                                   bringToFront = TRUE))
-      
-      
-      
-  
-      
+    
   })
+    
+    #pre_k_map
+    output$pre_k_map <- renderLeaflet({
+      leaflet() %>%
+        addProviderTiles(providers$Stamen.TonerLite,
+                         options = providerTileOptions(noWrap = TRUE)) %>%
+        setView(-73.983,40.7639,zoom = 12) %>% 
+        addPolygons( data = subdat,
+                     stroke = T, weight=1,
+                     fillOpacity = 0.6,
+                     color = ~pal(POPULATION),
+                     label = ~paste0(ZIPCODE,"Population:",POPULATION),
+                     labelOptions = labelOptions(direction = "auto"),
+                     highlight = highlightOptions(weight = 3,
+                                                  color = "red",
+                                                  bringToFront = TRUE))
+      
+    })
+    
+    output$el_map <- renderLeaflet({
+      leaflet() %>%
+        addProviderTiles(providers$Stamen.TonerLite,
+                         options = providerTileOptions(noWrap = TRUE)) %>%
+        setView(-73.983,40.7639,zoom = 12) %>% 
+        addPolygons( data = subdat,
+                     stroke = T, weight=1,
+                     fillOpacity = 0.6,
+                     color = ~pal(POPULATION),
+                     label = ~paste0(ZIPCODE,"Population:",POPULATION),
+                     labelOptions = labelOptions(direction = "auto"),
+                     highlight = highlightOptions(weight = 3,
+                                                  color = "red",
+                                                  bringToFront = TRUE))
+      
+    })
+    
+    output$hs_map <- renderLeaflet({
+      leaflet() %>%
+        addProviderTiles(providers$Stamen.TonerLite,
+                         options = providerTileOptions(noWrap = TRUE)) %>%
+        setView(-73.983,40.7639,zoom = 12) %>% 
+        addPolygons( data = subdat,
+                     stroke = T, weight=1,
+                     fillOpacity = 0.6,
+                     color = ~pal(POPULATION),
+                     label = ~paste0(ZIPCODE,"Population:",POPULATION),
+                     labelOptions = labelOptions(direction = "auto"),
+                     highlight = highlightOptions(weight = 3,
+                                                  color = "red",
+                                                  bringToFront = TRUE))
+      
+    })
 })
 

@@ -2,6 +2,7 @@
 # This is the user-interface definition of a Shiny web application
 
 library(shiny)
+library(varhandle)
 if (!require("shinythemes")) install.packages("shinythemes")
 library(leaflet)
 library(shinythemes)
@@ -13,8 +14,19 @@ shinyUI(fluidPage
                tabPanel(
                    "Introduction",
                    sidebarLayout(
-                       position = "right",
-                       sidebarPanel("To add side pannel and elements"),
+                       position = "left",
+                       sidebarPanel("Select the year you want data for:",
+                                    checkboxGroupInput("checkGroup", 
+                                                       h3("Year"), 
+                                                       choices = list("2016" = 2016, 
+                                                                      "2017" = 2017, 
+                                                                      "2018" = 2018),
+                                                       selected = 1),
+                                    tags$hr(),
+                                       textInput("text", h6("Select zipcode you want data for:"), 
+                                                     value = "")   
+                              
+                       ),
                        mainPanel( 
                            tags$div(
                            h1("** insert name of tool **"),
@@ -63,8 +75,54 @@ shinyUI(fluidPage
                           )
                         )
                       ),
-               tabPanel("Pre-K schools"),
-               tabPanel("Elementary School"),
-               tabPanel("High School")
+               tabPanel("Pre-K schools",
+                        sidebarPanel("Select the year you want data for:",
+                                     checkboxGroupInput("checkGroup", 
+                                                        h3("Year"), 
+                                                        choices = list("2016" = 2016, 
+                                                                       "2017" = 2017, 
+                                                                       "2018" = 2018),
+                                                        selected = 1),
+                                     tags$hr(),
+                                     textInput("text", h6("Select zipcode you want data for:"), 
+                                               value = "")   
+                                     
+                        ),
+                        mainPanel( 
+                        leafletOutput("pre_k_map")
+                        )
+                        ),
+               tabPanel("Elementary School",
+                        sidebarPanel("Select the year you want data for:",
+                                     checkboxGroupInput("checkGroup", 
+                                                        h3("Year"), 
+                                                        choices = list("2016" = 2016, 
+                                                                       "2017" = 2017, 
+                                                                       "2018" = 2018),
+                                                        selected = 1),
+                                     tags$hr(),
+                                     textInput("text", h6("Select zipcode you want data for:"), 
+                                               value = "")   
+                                     
+                        ),
+                        mainPanel( 
+                        leafletOutput("el_map"))
+                        ),
+               tabPanel("High School",
+                        sidebarPanel("Select the year you want data for:",
+                                     checkboxGroupInput("checkGroup", 
+                                                        h3("Year"), 
+                                                        choices = list("2016" = 2016, 
+                                                                       "2017" = 2017, 
+                                                                       "2018" = 2018),
+                                                        selected = 1),
+                                     tags$hr(),
+                                     textInput("text", h6("Select zipcode you want data for:"), 
+                                               value = "")   
+                                     
+                        ),
+                        mainPanel( 
+                        leafletOutput("hs_map"))
+                        )
     )
 ))
