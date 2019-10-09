@@ -8,16 +8,16 @@ library(leaflet)
 library(shinythemes)
 # Need a better name for the app
 shinyUI(fluidPage
-    (theme = shinytheme("flatly"),
-    navbarPage(
-        "Education Quality Assesment App",
-               tabPanel(
-                   "Introduction",
-                       mainPanel( 
-                           tags$div(
-                           h1("Education Quality Assessment App"),
-                           h3("Purpose of the tool"),
-                           p("Using publicly available NY data, our tool allows users to visualize
+        (theme = shinytheme("flatly"),
+          navbarPage(
+            "District Education Quality Assesment tool",
+            tabPanel(
+              "Introduction",
+              mainPanel( 
+                tags$div(
+                  h1("** insert name of tool **"),
+                  h3("Purpose of the tool"),
+                  p("Using publicly available NY data, our tool allows users to visualize
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                            ),
@@ -45,68 +45,52 @@ shinyUI(fluidPage
                            tags$div(
                              h2("How it works"),
                              h3("The Data"),
-                             p("This dataset comes from the NYC department of education. It includes information about 
+                             p("This dataset comes from the NYC department of education. It includes information about
                               school emotional support, organization, teacher approval, as well as student performance 
                               after pre-k. While the released dataset includes information from 2014-2015 school year 
                               until the 2017-2018 school year, the first year is incomplete so only 
                               the three most recent years are used.")
-                           ),
-                           tags$div(
-                             h3("Functionalities"),
-                             p("The tool allows users to see a summary of the schools of each zip code in New York's 5 
-                              borough for several different metrics. Since pre-k and grade schools vary drastically 
-                              they are on different tabs. In addition, grade school is seperated into different types of schools.
-                              In addition, users are able to query by year. If a user chooses to look at a specific zip code,
-                               they can view the top schools in that area.")
-                           )
-                   )
-               ),
-               tabPanel("Pre-K Schools",
-                        sidebarPanel(radioButtons(inputId="year_choice", label="Select the year you want data for:", 
-                                                  choices=c(2016, 2017, 2018), inline = TRUE),
-                                     tags$hr(),
-                                     selectInput("pre_k_metric", "Evaluation Metric:",
-                                                 c("Enrollment" = "Enrollment",
-                                                   "Emotional Support" = "CLASS Emotional Support Score",
-                                                   "Instruction Quality" = "CLASS Instructional Support Score",
-                                                   "Total Academic Score" = "Total.ECERS"
-                                                 )
-                                     ),
-                                     tags$hr(),
-                                     textInput("text", "Explore the schools in a zip code:", 
-                                               value = ""),
-                                     tags$hr(),
-                                     sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                         ),
-                        mainPanel( 
-                        leafletOutput("pre_k_map", height = 600)
-                        )
-                        ),
-               tabPanel("Grade Schools",
-                        sidebarPanel(radioButtons("school type", label="Type of school:",
-                                                        choices = c("Elementary" = "Elementary", 
-                                                                       "Middle" = "Middle", 
-                                                                       "K-8" = "K-8",
-                                                                       "High School" = "High School"),
-                                                        selected = "Elementary", inline = TRUE),
-                                     tags$hr(),
-                                     radioButtons(inputId="year_choice", label="Select the year you want data for:", 
-                                                  choices=c(2016, 2017, 2018), inline = TRUE),
-                                     tags$hr(),
-                                     selectInput("elem_metric", "Evaluation Metric:",
-                                                 c("Enrollment" = "enroll",
-                                                   "Student Achievement" = "SASS.mean",
-                                                   "Rigorous Instruction" = "RIES.mean"
-                                                 )
-                                     ),
-                                     tags$hr(),
-                                     textInput("text", "Explore the schools in a zip code:", 
-                                               value = ""),
-                                     tags$hr(),
-                                     sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
-                        ),
-                        mainPanel( 
-                        leafletOutput("grade_map", height = 600))
-                        )
-    )
-))
+                tags$div(
+                  h3("Functionalities"),
+                  p("The tool allows users to see a summary of the schools of each zip code in New York's 5 
+                              borough for many different metrics. Since schools vary drastically 
+                              depending on what grades they serve, the different age schools are 
+                              on different tabs. In addition, users are able to query by year. ")
+                )
+              )
+            ),
+            tabPanel("Pre-K Schools",
+                     sidebarPanel(radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
+                                               choices=c(2016, 2017, 2018), inline = TRUE),
+                                  tags$hr(),
+                                  textInput("text", "Explore the schools in a zip code:", 
+                                            value = ""),
+                                  tags$hr(),
+                                  sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
+                     ),
+                     mainPanel( 
+                       leafletOutput("pre_k_map")
+                     )
+            ),
+            tabPanel("Grade Schools",
+                     sidebarPanel(radioButtons("school type", label="Type of school:",
+                                               choices = c("Elementary" = "Elementary", 
+                                                           "Middle" = "Middle", 
+                                                           "K-8" = "K-8",
+                                                           "High School" = "High School"),
+                                               selected = "Elementary", inline = TRUE),
+                                  tags$hr(),
+                                  radioButtons(inputId="gd_year", label="Select the year you want data for:", 
+                                               choices=c(2016, 2017, 2018), inline = TRUE),
+                                  tags$hr(),
+                                  textInput("text", "Explore the schools in a zip code:", 
+                                            value = ""),
+                                  tags$hr(),
+                                  sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
+                     ),
+                     mainPanel( 
+                       leafletOutput("grade_map"))
+            )
+          )
+        ))
