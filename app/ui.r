@@ -84,9 +84,15 @@ shinyUI(fluidPage
                                                                        "2018" = 2018),
                                                         selected = 1),
                                      tags$hr(),
+                                     selectInput("pre_k_metric", "Evaluation Metric:",
+                                                 c("Enrollment" = "Enrollment",
+                                                   "Emotional Support" = "CLASS Emotional Support Score",
+                                                   "Instruction Quality" = "CLASS Instructional Support Score"
+                                                 )
+                                     ),
+                                     tags$hr(),
                                      textInput("text", h6("Select zipcode you want data for:"), 
-                                               value = "")   
-                                     
+                                               value = "")
                         ),
                         mainPanel( 
                         leafletOutput("pre_k_map")
@@ -101,9 +107,18 @@ shinyUI(fluidPage
                                                                        "2018" = 2018),
                                                         selected = 1),
                                      tags$hr(),
+                                     selectInput("elem_metric", "Evaluation Metric:",
+                                                 c("Enrollment" = "Enrollment",
+                                                   "Overall Achievement" = "Student Achievement - Section Score",
+                                                   "Supportive Environment" = "Supportive Environment - Element Score",
+                                                   "Average Student English Proficiency" = "Average Grade 8 English Proficiency",
+                                                   "Average Student Math Proficiency" = "Average Grade 8 Math Proficiency",
+                                                   "Average Student Science Proficiency" = "Average Grade 8 Science Proficiency"
+                                                 )
+                                     ),
+                                     tags$hr(),
                                      textInput("text", h6("Select zipcode you want data for:"), 
-                                               value = "")   
-                                     
+                                               value = "")
                         ),
                         mainPanel( 
                         leafletOutput("el_map"))
@@ -117,9 +132,18 @@ shinyUI(fluidPage
                                                                        "2018" = 2018),
                                                         selected = 1),
                                      tags$hr(),
+                                     selectInput("hs_metric", "Evaluation Metric:",
+                                                 c("Enrollment" = "Enrollment",
+                                                   "Overall Achievement" = "Student Achievement - Section Score",
+                                                   "Supportive Environment" = "Supportive Environment - Element Score",
+                                                   "Average Student English Proficiency" = "Average Grade 8 English Proficiency",
+                                                   "Average Student Math Proficiency" = "Average Grade 8 Math Proficiency",
+                                                   "Average Student Science Proficiency" = "Average Grade 8 Science Proficiency"
+                                                 )
+                                     ),
+                                     tags$hr(),
                                      textInput("text", h6("Select zipcode you want data for:"), 
                                                value = "")   
-                                     
                         ),
                         mainPanel( 
                         leafletOutput("hs_map"))
