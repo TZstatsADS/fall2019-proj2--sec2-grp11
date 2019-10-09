@@ -10,18 +10,19 @@ library(shinythemes)
 shinyUI(fluidPage
     (theme = shinytheme("flatly"),
     navbarPage(
-        "District Education Quality Assesment tool",
+        "Education Quality Assesment App",
                tabPanel(
                    "Introduction",
                        mainPanel( 
                            tags$div(
-                           h1("** insert name of tool **"),
+                           h1("Education Quality Assessment App"),
                            h3("Purpose of the tool"),
                            p("Using publicly available NY data, our tool allows users to visualize
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                            ),
                            leafletOutput("num_schools_map"), 
+                           "This map displays the number of schools in each zip code. Darker colors indicate more schools.",
                            tags$div(
                            h3("Who are we creating value for?"),
                            tags$ul(
@@ -35,12 +36,14 @@ shinyUI(fluidPage
                            tags$p("Our app analyzes the following types of schools in Manhattan: "),
                            tags$ul(
                                tags$li("Pre-K schools"),
-                               tags$li("Elementary schools"),
+                               tags$li("Elementary chools"),
+                               tags$li("Middle schools"),
+                               tags$li("K-8 schools"),
                                tags$li("High schools")
                            )
                            ),
                            tags$div(
-                             h2("How **tool ** works"),
+                             h2("How it works"),
                              h3("The Data"),
                              p("This dataset comes from the NYC department of education. It includes information about 
                               school emotional support, organization, teacher approval, as well as student performance 
@@ -51,9 +54,10 @@ shinyUI(fluidPage
                            tags$div(
                              h3("Functionalities"),
                              p("The tool allows users to see a summary of the schools of each zip code in New York's 5 
-                              borough for many different metrics. Since schools vary drastically 
-                              depending on what grades they serve, the different age schools are 
-                              on different tabs. In addition, users are able to query by year. ")
+                              borough for several different metrics. Since pre-k and grade schools vary drastically 
+                              they are on different tabs. In addition, grade school is seperated into different types of schools.
+                              In addition, users are able to query by year. If a user chooses to look at a specific zip code,
+                               they can view the top schools in that area.")
                            )
                    )
                ),
