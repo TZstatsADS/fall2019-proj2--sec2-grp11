@@ -60,15 +60,20 @@ shinyUI(fluidPage
             tabPanel("Pre-K Schools",
                      sidebarPanel(
                        tags$div(
-                         tags$p("Exlpanation on the filtering metrics:"),
+                         tags$p("What are the filtering metrics:"),
                          tags$ul(
-                           tags$li(tags$b("ECERS")," is a classroom assessment tool designed to measure the quality 
+                           tags$li(tags$b("Enrollment:"), "Enrollment in the schools"),
+                           tags$li(tags$b("Emotional Support:"), "*add explanation*"),
+                           tags$li(tags$b("Instructional Support:"), "*add explanation*"),
+                           tags$li(tags$b("ECERS score")," is a classroom assessment tool designed to measure the quality 
                             of group programs for infants and toddlers"
                             ),
+                           tags$li(tags$b("Year:"), "The year the data is pulled from"),
                            tags$li(tags$b("Enrollment:"), "Average enrollment in the schools")
                            
-                           
-                         )),
+                         ),
+                         tags$p(" ")
+                         ),
                        radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
                                                choices=c(2016, 2017, 2018), inline = TRUE),
                                   tags$hr(),
@@ -103,10 +108,13 @@ shinyUI(fluidPage
                        tags$div(
                          tags$p("Exlpanation on the filtering metrics:"),
                          tags$ul(
-                           tags$li(tags$b("ECERS")," is a classroom assessment tool designed to measure the quality 
-                                   of group programs for infants and toddlers"
+                           tags$li(tags$b("Type of school")," The type of grade school to display data for"
                            ),
-                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools")
+                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools"),
+                           tags$li(tags$b("Year:"), "The year the data is pulled from"),
+                           tags$li(tags$b("Zipcode:"), "The zipcode you want display data for"),
+                           tags$li(tags$b("Student Achievment"), "*add definition*"),
+                           tags$li(tags$b("Rigorous Instruction"), "*add definition*")
                            
                            
                            )),
