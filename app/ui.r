@@ -78,6 +78,16 @@ shinyUI(fluidPage
                                   sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
                                   actionButton('pk_submit', 'Submit', icon = NULL, width = NULL)
                      ),
+                     absolutePanel(id = "pk_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
+                                   top = 720, left = 44, right = "auto", bottom = "auto", width = 272, height = 400,
+                                   h3("School Information"), 
+                                   tags$b("Impact and Performance"),
+                                   br(),
+                                   "Based on all student achievement metrics, impact measures a school's teaching ability
+                                   against expected outcomes, adjusted for incoming student factors. Performance is the 
+                                   unadjusted outcomes.",
+                                   dataTableOutput('pk_table')
+                     ),
                      mainPanel( 
                        tags$div(
                          p("On this page, the tool displays some statistics for pre-k schools. You 
@@ -118,7 +128,16 @@ shinyUI(fluidPage
                               
                                   actionButton('s_submit', 'Submit', icon = NULL, width = NULL)
                                   ),
-                     
+                     absolutePanel(id = "gd_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
+                                   top = 860, left = 44, right = "auto", bottom = "auto", width = 272, height = 400,
+                                   h3("School Information"), 
+                                   tags$b("Impact and Performance"),
+                                   br(),
+                                   "Based on all student achievement metrics, impact measures a school's teaching ability
+                                   against expected outcomes, adjusted for incoming student factors. Performance is the 
+                                   unadjusted outcomes.",
+                                   dataTableOutput('pk_table')
+                     ),
                      mainPanel( 
                        tags$div(
                          p("On this page, the tool displays some statistics for grade schools. You 
