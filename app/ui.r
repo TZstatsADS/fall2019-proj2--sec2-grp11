@@ -69,7 +69,7 @@ shinyUI(fluidPage
                                   
                      ),
                      mainPanel( 
-                       leafletOutput("pre_k_map")
+                       leafletOutput("pre_k_map",height = 800)
                      )
             ),
             tabPanel("Grade Schools",
@@ -93,7 +93,7 @@ shinyUI(fluidPage
                                   ),
                      
                      mainPanel( 
-                       leafletOutput("grade_map"))
+                       leafletOutput("grade_map",height = 800))
             )
           )
         ))
