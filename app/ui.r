@@ -69,6 +69,11 @@ shinyUI(fluidPage
                                   sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
                                   dataTableOutput('pre_k_table')
                      ),
+                     absolutePanel(id = "pk_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
+                                   top = 530, left = 44, right = "auto", bottom = "auto", width = 352, height = 400,
+                                   h3("Outputs TESTING TESTING"), #REMOVE THIS LINE ONCE CONFIRMED
+                                   dataTableOutput('pk_table')
+                     ),
                      mainPanel( 
                        leafletOutput("pre_k_map")
                      )
@@ -88,12 +93,15 @@ shinyUI(fluidPage
                                             value = ""),
                                   actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                                   tags$hr(),
-                                  sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
-                                  dataTableOutput('gd_table')
-                                  
+                                  sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                      ),
-                     mainPanel( 
-                       leafletOutput("grade_map"))
-            )
+                     absolutePanel(id = "gd_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
+                                   top = 640, left = 44, right = "auto", bottom = "auto", width = 352, height = 400,
+                                   h3("Outputs TESTING TESTING"), #REMOVE THIS LINE ONCE CONFIRMED
+                                   dataTableOutput('gd_table')
+                     ),
+                    mainPanel( 
+                      leafletOutput("grade_map"))
+                    )
           )
         ))
