@@ -6,7 +6,7 @@ library(maps)
 library(rgdal)
 library(dplyr)
 library(plotly)
-library(readxl)
+library(chron)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -377,9 +377,15 @@ shinyServer(function(input, output) {
       filter(round(lon,7) == round(clon,7), 
              round(lat,7) == round(clat,7))
     
-    
-    res <- res$`Program Name`
-    print(res)
+    ## Pre-k Output
+    output$click_pkschool <- renderText(res[1,]$`Program Name`)
+    output$click_prek1 <- renderText(res[1,]$`Enrollment`)
+    output$click_prek3 <- renderText(res[1,]$`Length of Pre-K Day`)
+    output$click_prek4 <- renderText(res[1,]$`Early Drop-Off Available`)
+    output$click_prek5 <- renderText(res[1,]$`Late Pick-Up Available`)
+    output$click_prek6 <- renderText(res[1,]$`Meals`)
+    output$click_prek7 <- renderText(res[1,]$`Playspace`)
+    output$click_prek8 <- renderText(res[1,]$`Dual Language`)
     
   })
   
@@ -622,9 +628,7 @@ shinyServer(function(input, output) {
     })
       
   
-    ## Pre-k Output
-    output$click_prek1 <- renderText('Succeed!!!!!')
-    output$click_prek2 <- renderText('Doule Succeed')
+    
     
     
     
