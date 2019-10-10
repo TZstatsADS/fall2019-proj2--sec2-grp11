@@ -21,7 +21,8 @@ shinyUI(fluidPage
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                 ),
-                leafletOutput("num_schools_map"), 
+                leafletOutput("num_schools_map"),
+                "Number of schools in each zip code",
                 tags$div(
                   h3("Who are we creating value for?"),
                   tags$ul(
@@ -65,7 +66,8 @@ shinyUI(fluidPage
                                             value = ""),
                                   actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                                   tags$hr(),
-                                  sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
+                                  sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
+                                  dataTableOutput('pre_k_table')
                      ),
                      mainPanel( 
                        leafletOutput("pre_k_map")
@@ -86,7 +88,9 @@ shinyUI(fluidPage
                                             value = ""),
                                   actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                                   tags$hr(),
-                                  sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
+                                  sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
+                                  dataTableOutput('gd_table')
+                                  
                      ),
                      mainPanel( 
                        leafletOutput("grade_map"))
