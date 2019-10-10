@@ -21,8 +21,7 @@ shinyUI(fluidPage
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                 ),
-                leafletOutput("num_schools_map"),
-                "Number of schools in each zip code",
+                leafletOutput("num_schools_map"), 
                 tags$div(
                   h3("Who are we creating value for?"),
                   tags$ul(
@@ -59,23 +58,35 @@ shinyUI(fluidPage
               )
             ),
             tabPanel("Pre-K Schools",
-                     sidebarPanel(radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
+                     sidebarPanel(
+                       tags$div(
+                         tags$p("Exlpanation on the filtering metrics:"),
+                         tags$ul(
+                           tags$li(tags$b("ECERS")," is a classroom assessment tool designed to measure the quality 
+                            of group programs for infants and toddlers"
+                            ),
+                           tags$li(tags$b("Enrollment:"), "Enrollment in the schools")
+                           
+                           
+                         )),
+                       radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
                                                choices=c(2016, 2017, 2018), inline = TRUE),
                                   tags$hr(),
                                   textInput("zip_pk", "Explore the schools in a zip code:", 
                                             value = ""),
-                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                                   tags$hr(),
                                   sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
-                                  dataTableOutput('pre_k_table')
-                     ),
-                     absolutePanel(id = "pk_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
-                                   top = 530, left = 44, right = "auto", bottom = "auto", width = 352, height = 400,
-                                   h3("Outputs TESTING TESTING"), #REMOVE THIS LINE ONCE CONFIRMED
-                                   dataTableOutput('pk_table')
+                                  actionButton('pk_submit', 'Submit', icon = NULL, width = NULL),
+                                  
                      ),
                      mainPanel( 
-                       leafletOutput("pre_k_map")
+                       tags$div(
+                         p("On this page, the tool displays some statistics for grade schools. You 
+                            can choose which factor to use to vary the heat on the map" )
+                           
+                           
+                         ),
+                       leafletOutput("pre_k_map",height = 800)
                      )
             ),
             tabPanel("Grade Schools",
@@ -91,17 +102,15 @@ shinyUI(fluidPage
                                   tags$hr(),
                                   textInput("zip_s", "Explore the schools in a zip code:", 
                                             value = ""),
-                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                                   tags$hr(),
-                                  sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
-                     ),
-                     absolutePanel(id = "gd_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
-                                   top = 640, left = 44, right = "auto", bottom = "auto", width = 352, height = 400,
-                                   h3("Outputs TESTING TESTING"), #REMOVE THIS LINE ONCE CONFIRMED
-                                   dataTableOutput('gd_table')
-                     ),
-                    mainPanel( 
-                      leafletOutput("grade_map"))
-                    )
+                                  sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
+                                  tags$hr(),
+                              
+                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
+                                  ),
+                     
+                     mainPanel( 
+                       leafletOutput("grade_map",height = 800))
+            )
           )
         ))
