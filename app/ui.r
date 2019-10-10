@@ -21,8 +21,7 @@ shinyUI(fluidPage
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                 ),
-                leafletOutput("num_schools_map"),
-                "Number of schools in each zip code",
+                leafletOutput("num_schools_map"), 
                 tags$div(
                   h3("Who are we creating value for?"),
                   tags$ul(
@@ -66,17 +65,8 @@ shinyUI(fluidPage
                                             value = ""),
                                   tags$hr(),
                                   sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
-<<<<<<< HEAD
                                   actionButton('pk_submit', 'Submit', icon = NULL, width = NULL),
                                   
-=======
-                                  dataTableOutput('pre_k_table')
-                     ),
-                     absolutePanel(id = "pk_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
-                                   top = 530, left = 44, right = "auto", bottom = "auto", width = 352, height = 400,
-                                   h3("Outputs TESTING TESTING"), #REMOVE THIS LINE ONCE CONFIRMED
-                                   dataTableOutput('pk_table')
->>>>>>> bea72645957692cdaed938ed4fc9db5eba5b9305
                      ),
                      mainPanel( 
                        leafletOutput("pre_k_map")
@@ -96,7 +86,6 @@ shinyUI(fluidPage
                                   textInput("zip_s", "Explore the schools in a zip code:", 
                                             value = ""),
                                   tags$hr(),
-<<<<<<< HEAD
                                   sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
                                   tags$hr(),
                               
@@ -106,17 +95,5 @@ shinyUI(fluidPage
                      mainPanel( 
                        leafletOutput("grade_map"))
             )
-=======
-                                  sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
-                     ),
-                     absolutePanel(id = "gd_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
-                                   top = 640, left = 44, right = "auto", bottom = "auto", width = 352, height = 400,
-                                   h3("Outputs TESTING TESTING"), #REMOVE THIS LINE ONCE CONFIRMED
-                                   dataTableOutput('gd_table')
-                     ),
-                    mainPanel( 
-                      leafletOutput("grade_map"))
-                    )
->>>>>>> bea72645957692cdaed938ed4fc9db5eba5b9305
           )
         ))
