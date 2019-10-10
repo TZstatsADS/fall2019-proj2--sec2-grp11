@@ -6,6 +6,8 @@ library(varhandle)
 if (!require("shinythemes")) install.packages("shinythemes")
 library(leaflet)
 library(shinythemes)
+library(plotly)
+
 # Need a better name for the app
 shinyUI(fluidPage
         (theme = shinytheme("flatly"),
@@ -67,21 +69,21 @@ shinyUI(fluidPage
                            tags$li(tags$b("Instructional Support:"), "*add explanation*"),
                            tags$li(tags$b("ECERS score:")," a classroom assessment tool designed to measure the quality 
                             of group programs for infants and toddlers"
-                            ),
+                           ),
                            tags$li(tags$b("Year:"), "The year the data is pulled from"),
                            tags$li(tags$b("Enrollment:"), "Average enrollment in the schools")
                            
                          ),
                          tags$p(" ")
-                         ),
+                       ),
                        radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
-                                               choices=c(2016, 2017, 2018), inline = TRUE),
-                                  tags$hr(),
-                                  textInput("zip_pk", "Explore the schools in a zip code:", 
-                                            value = ""),
-                                  tags$hr(),
-                                  sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
-                                  actionButton('pk_submit', 'Submit', icon = NULL, width = NULL),
+                                    choices=c(2016, 2017, 2018), inline = TRUE),
+                       tags$hr(),
+                       textInput("zip_pk", "Explore the schools in a zip code:", 
+                                 value = ""),
+                       tags$hr(),
+                       sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
+                       actionButton('pk_submit', 'Submit', icon = NULL, width = NULL),
                        
                        h3("Info. Of"),
                        p("Student Achievement:",textOutput("click_prek1",inline = T)),
@@ -96,74 +98,68 @@ shinyUI(fluidPage
                        
                        
                      ),
- 
+                     
                      mainPanel( 
                        tags$div(
                          p("On this page, the tool displays some statistics for pre-k schools. You 
                             can choose which factor to use to vary the heat on the map" )
-                           
-                           
-                         ),
+                         
+                         
+                       ),
                        leafletOutput("pre_k_map",height = 1200)
                      )
             ),
-            tabPanel("Grade Schools",
+            tabPanel("Elementary to High Schools",
                      sidebarPanel(
                        tags$div(
-                         tags$p("Explanation on the filtering metrics:"),
+                         tags$p("Explanation on the metrics:"),
                          tags$ul(
-                           tags$li(tags$b("Type of school")," The type of grade school to display data for"
-                           ),
-                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools"),
-                           tags$li(tags$b("Year:"), "The year the data is pulled from"),
-                           tags$li(tags$b("Zipcode:"), "The zipcode you want display data for"),
+                           
+                           tags$li(tags$b("Enrollment:"), "Average enrollment"),
+        
                            tags$li(tags$b("Student Achievment"), "*add definition*"),
                            tags$li(tags$b("Rigorous Instruction"), "*add definition*")
                            
-                           
-                           ),
-                         p("You can also filter the number of schools you want to view data for")
                          ),
+                         p("You can also filter the number of schools you want to view data for")
+                       ),
                        radioButtons("school type", label="Type of school:",
-                                               choices = c("Elementary" = "Elementary", 
-                                                           "Middle" = "Middle", 
-                                                           "K-8" = "K-8",
-                                                           "High School" = "High School"),
-                                               selected = "Elementary", inline = TRUE),
+                                    choices = c("Elementary" = "Elementary", 
+                                                "Middle" = "Middle", 
+                                                "K-8" = "K-8",
+                                                "High School" = "High School"),
+                                    selected = "Elementary", inline = TRUE),
                        radioButtons(inputId="gd_year", label="Select the year you want data for:", 
-                                               choices=c(2016, 2017, 2018), inline = TRUE),
+                                    choices=c(2016, 2017, 2018), inline = TRUE),
                        textInput("zip_s", "Explore the schools in a zip code:", 
-                                            value = ""),
+                                 value = ""),
                        sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
-
+                       
                        actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                        
                        h3("Info. Of"),
+                       p(textOutput("click_school")),
                        p("Student Achievement:",textOutput("click_sa",inline = T)),
                        p("Rigrous Instruction:",textOutput("click_sb",inline = T)),
                        h4("Impact and Performance"),
                        h5("Based on all student achievement metrics, impact measures a school's teaching ability
                     against expected outcomes, adjusted for incoming student factors. Performance is the
                     unadjusted outcomes."),
+                       plotlyOutput("click_IP", height="300"),
                        br(),
-                       h6("Demographic Categories"),
-
+                       h4("Demographic Categories"),
+                       plotlyOutput("click_ra", height="200")
                        
                        
                        
-                       
-                       
-                       
-                       
-                       
-                                  ),
-
+                     ),
+                     
                      mainPanel( 
                        tags$div(
                          p("On this page, the tool displays some statistics for grade schools. You 
                            can choose which factor to use to vary the heat on the map" )
                          
-                         ),
+                       ),
                        leafletOutput("grade_map",height = 1200))
             )
           )
