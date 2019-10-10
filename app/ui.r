@@ -24,6 +24,7 @@ shinyUI(fluidPage
                              emotional support and student's academic performance go into how we score the quality of a school.")
                 ),
                 leafletOutput("num_schools_map"), 
+                "Number of schools in each zip code heat map.",
                 tags$div(
                   h3("Who are we creating value for?"),
                   tags$ul(
@@ -65,11 +66,11 @@ shinyUI(fluidPage
                          tags$p("What are the metrics:"),
                          tags$ul(
                            tags$li(tags$b("Enrollment:"), "Average Enrollment"),
-                           tags$li(tags$b("Emotional Support:"), "*add explanation*"),
-                           tags$li(tags$b("Instructional Support:"), "*add explanation*"),
+                           tags$li(tags$b("Emotional Support:"), "The amount of care given to help children emotionally develop"),
+                           tags$li(tags$b("Instructional Support:"), "Measures how well teachers are able to facilitate toddler engagement and learning"),
                            tags$li(tags$b("ECERS score:")," a classroom assessment tool designed to measure the quality 
                             of group programs for infants and toddlers"
-                           ),
+                           )
                            
                            
                          ),
@@ -92,7 +93,7 @@ shinyUI(fluidPage
                        p("Late Pick-Up Available: ",strong(textOutput("click_prek5",inline = T))),
                        p("Meals: ",strong(textOutput("click_prek6",inline = T))),
                        p("Playspace: ",strong(textOutput("click_prek7",inline = T))),
-                       p("Dual Language: ",strong(textOutput("click_prek8",inline = T))),
+                       p("Dual Language: ",strong(textOutput("click_prek8",inline = T)))
                        
                     
                      ),
@@ -115,8 +116,8 @@ shinyUI(fluidPage
                            
                            tags$li(tags$b("Enrollment:"), "Average enrollment"),
         
-                           tags$li(tags$b("Student Achievment"), "*add definition*"),
-                           tags$li(tags$b("Rigorous Instruction"), "*add definition*")
+                           tags$li(tags$b("Student Achievment"), "Information about school's state school results, as well as student growth and how well prepared they are for future years."),
+                           tags$li(tags$b("Rigorous Instruction"), "Curriculum are designed to engage students, foster critical thinking, and aligned with common core.")
                            
                          ),
                          p("You can also filter the number of schools you want to view data for")
