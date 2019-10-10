@@ -81,7 +81,20 @@ shinyUI(fluidPage
                                             value = ""),
                                   tags$hr(),
                                   sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
-                                  actionButton('pk_submit', 'Submit', icon = NULL, width = NULL)
+                                  actionButton('pk_submit', 'Submit', icon = NULL, width = NULL),
+                       
+                       h3("Info. Of"),
+                       p("Student Achievement:",textOutput("click_prek1",inline = T)),
+                       p("Rigrous Instruction:",textOutput("click_prek2",inline = T)),
+                       h4("Impact and Performance"),
+                       h5("Based on all student achievement metrics, impact measures a school's teaching ability
+                    against expected outcomes, adjusted for incoming student factors. Performance is the
+                    unadjusted outcomes."),
+                       br(),
+                       h6("Demographic Categories"),
+                       
+                       
+                       
                      ),
  
                      mainPanel( 
@@ -117,17 +130,32 @@ shinyUI(fluidPage
                                                            "K-8" = "K-8",
                                                            "High School" = "High School"),
                                                selected = "Elementary", inline = TRUE),
-                                  tags$hr(),
-                                  radioButtons(inputId="gd_year", label="Select the year you want data for:", 
+                       radioButtons(inputId="gd_year", label="Select the year you want data for:", 
                                                choices=c(2016, 2017, 2018), inline = TRUE),
-                                  tags$hr(),
-                                  textInput("zip_s", "Explore the schools in a zip code:", 
+                       textInput("zip_s", "Explore the schools in a zip code:", 
                                             value = ""),
-                                  tags$hr(),
-                                  sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
-                                  tags$hr(),
-                              
-                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL)
+                       sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
+
+                       actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
+                       
+                       h3("Info. Of"),
+                       p("Student Achievement:",textOutput("click_sa",inline = T)),
+                       p("Rigrous Instruction:",textOutput("click_sb",inline = T)),
+                       h4("Impact and Performance"),
+                       h5("Based on all student achievement metrics, impact measures a school's teaching ability
+                    against expected outcomes, adjusted for incoming student factors. Performance is the
+                    unadjusted outcomes."),
+                       br(),
+                       h6("Demographic Categories"),
+
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
                                   ),
 
                      mainPanel( 

@@ -672,6 +672,13 @@ shinyServer(function(input, output) {
     print(res)
     
   })
+  output$click_prek1 <- renderText('Succeed!!!!!')
+  output$click_prek2 <- renderText('Doule Succeed')
+  output$click_sa <- renderText('Succeed!!!!!')
+  output$click_sb <- renderText('Doule Succeed')
+
+  
+  
 })
 
 
