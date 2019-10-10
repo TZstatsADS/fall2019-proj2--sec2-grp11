@@ -27,8 +27,27 @@ shinyServer(function(input, output) {
   pk2018 <- read.csv("../output/2018pkdata.final.csv")
   pk2016<-read.csv("../output/2016pkdata.final.csv")
   pk2017<-read.csv("../output/2017pkdata.final.csv")
+  pkdata<-read.csv("../output/pkdata.final.csv")
+  pkschooldata <- read_excel("~/Desktop/5243/Project 2/data/2018_pk.xlsx",col_names = TRUE)
+  pk_latlon <- readRDS("/Users/liujiyuan/Desktop/5243/Project 2/output/pk_latlon.rds")
+  pkschooldata <- pkschooldata[c(-1),]
+
+  pkschooldata$Address <- paste(pkschooldata$`Address 1`,",",pkschooldata$`Address 2`)
+  
+  pkschooldata$Zipcode <- NA
+  
+  for (i in 1:nrow(pkschooldata)) {
+    pkschooldata$Zipcode[i] <- substr(pkschooldata$`Address 2`[i],nchar(pkschooldata$`Address 2`[i])-4,nchar(pkschooldata$`Address 2`[i]))
+  }
+  
+  pkschooldata$Total.CLASS <- sum(as.numeric(pkschooldata$`CLASS Emotional Support Score`),
+                                  as.numeric(pkschooldata$`CLASS Classroom Organization Score`),
+                                  as.numeric(pkschooldata$`CLASS Instructional Support Score`))
+  
+  pkschooldata <- merge(pkschooldata, pk_latlon, by.x="Address", by.y="X.pk.")
   
   
+  ####################################### Introduction ###########################################  
   # simple map
   output$num_schools_map <- renderLeaflet({
     
@@ -211,250 +230,159 @@ shinyServer(function(input, output) {
   
   
   ####################################### Pre-K School ###########################################
-  # pre-k map
+  
+  #pre_k_map
+  
   output$pre_k_map <- renderLeaflet({
-    if(input$pre_k_year=="2016"){
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% pk2016$Zipcode)
-      subdat <- spTransform(selZip, CRS("+init=epsg:4326"))
-      subdat_data=subdat@data[,c("ZIPCODE","POPULATION")]
-      subdat.rownames=rownames(subdat_data)
-      subdat_data$ZIPCODE <- as.character(subdat_data$ZIPCODE)
-      pk2016$Zipcode  <- as.character(pk2016$Zipcode)
-      subdat_data=
-        subdat_data%>%left_join(pk2016, by=c("ZIPCODE" = "Zipcode"))
-      rownames(subdat_data)=subdat.rownames
-      subdat<-SpatialPolygonsDataFrame(subdat, data=subdat_data)
-      pal.1 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$Enrollment
-      )
-      pal.2 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$CLASS.Emotional.Support.Score
-      )
-      pal.3 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$CLASS.Instructional.Support.Score
-      )
-      pal.4 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$Total.ECERS
-      )
-      
-      leaflet() %>%
-        addProviderTiles(providers$Stamen.TonerLite,
-                         options = providerTileOptions(noWrap = TRUE)) %>%
-        setView(-73.983,40.7639,zoom = 12) %>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.1(Enrollment),
-                     label = ~paste0(ZIPCODE," \n Enrollment: ",Enrollment),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "Enrollment") %>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.2(CLASS.Emotional.Support.Score),
-                     label = ~paste0(ZIPCODE," Emotional Support: ",CLASS.Emotional.Support.Score),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "Emotional Support Score")%>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.3(CLASS.Instructional.Support.Score),
-                     label = ~paste0(ZIPCODE," Instructional Support: ",CLASS.Instructional.Support.Score),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "Instructional Support")%>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.4(CLASS.Instructional.Support.Score),
-                     label = ~paste0(ZIPCODE," ECERS Score: ",Total.ECERS),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "ECERS Score")%>%
-        addLayersControl(
-          baseGroups = c("Enrollment", "Emotional Support","Instructional Support","ECERS Score"),
-          options = layersControlOptions(collapsed = FALSE)
-        )
-      
-    } else if(input$pre_k_year=="2017"){
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% pk2017$Zipcode)
-      subdat <- spTransform(selZip, CRS("+init=epsg:4326"))
-      subdat_data=subdat@data[,c("ZIPCODE","POPULATION")]
-      subdat.rownames=rownames(subdat_data)
-      subdat_data$ZIPCODE <- as.character(subdat_data$ZIPCODE)
-      pk2017$Zipcode  <- as.character(pk2017$Zipcode)
-      subdat_data=
-        subdat_data%>%left_join(pk2017, by=c("ZIPCODE" = "Zipcode"))
-      rownames(subdat_data)=subdat.rownames
-      subdat<-SpatialPolygonsDataFrame(subdat, data=subdat_data)
-      pal.1 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$Enrollment
-      )
-      pal.2 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$CLASS.Emotional.Support.Score
-      )
-      pal.3 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$CLASS.Instructional.Support.Score
-      )
-      pal.4 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$Total.ECERS
-      )
-      
-      leaflet() %>%
-        addProviderTiles(providers$Stamen.TonerLite,
-                         options = providerTileOptions(noWrap = TRUE)) %>%
-        setView(-73.983,40.7639,zoom = 12) %>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.1(Enrollment),
-                     label = ~paste0(ZIPCODE," \n Enrollment: ",Enrollment),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "Enrollment") %>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.2(CLASS.Emotional.Support.Score),
-                     label = ~paste0(ZIPCODE," Emotional Support: ",CLASS.Emotional.Support.Score),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "Emotional Support Score")%>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.3(CLASS.Instructional.Support.Score),
-                     label = ~paste0(ZIPCODE," Instructional Support: ",CLASS.Instructional.Support.Score),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "Instructional Support")%>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.4(CLASS.Instructional.Support.Score),
-                     label = ~paste0(ZIPCODE," ECERS Score: ",Total.ECERS),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "ECERS Score")%>%
-        addLayersControl(
-          baseGroups = c("Enrollment", "Emotional Support","Instructional Support","ECERS Score"),
-          options = layersControlOptions(collapsed = FALSE)
-        )
-      
-    } else if(input$pre_k_year=="2018"){
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% pk2018$Zipcode)
-      subdat <- spTransform(selZip, CRS("+init=epsg:4326"))
-      subdat_data=subdat@data[,c("ZIPCODE","POPULATION")]
-      subdat.rownames=rownames(subdat_data)
-      subdat_data$ZIPCODE <- as.character(subdat_data$ZIPCODE)
-      pk2018$Zipcode  <- as.character(pk2018$Zipcode)
-      subdat_data=
-        subdat_data%>%left_join(pk2018, by=c("ZIPCODE" = "Zipcode"))
-      rownames(subdat_data)=subdat.rownames
-      subdat<-SpatialPolygonsDataFrame(subdat, data=subdat_data)
-      pal.1 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$Enrollment
-      )
-      pal.2 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$CLASS.Emotional.Support.Score
-      )
-      pal.3 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$CLASS.Instructional.Support.Score
-      )
-      pal.4 <- colorNumeric(
-        palette = "Reds",
-        domain <- subdat_data$Total.ECERS
-      )
-      
-      leaflet() %>%
-        addProviderTiles(providers$Stamen.TonerLite,
-                         options = providerTileOptions(noWrap = TRUE)) %>%
-        setView(-73.983,40.7639,zoom = 12) %>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.1(Enrollment),
-                     label = ~paste0(ZIPCODE," \n Enrollment: ",Enrollment),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "Enrollment") %>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.2(CLASS.Emotional.Support.Score),
-                     label = ~paste0(ZIPCODE," Emotional Support: ",CLASS.Emotional.Support.Score),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "Emotional Support Score")%>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.3(CLASS.Instructional.Support.Score),
-                     label = ~paste0(ZIPCODE," Instructional Support: ",CLASS.Instructional.Support.Score),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "Instructional Support")%>%
-        addPolygons( data = subdat,
-                     stroke = T, weight=1,
-                     fillOpacity = 0.6,
-                     color = ~pal.4(CLASS.Instructional.Support.Score),
-                     label = ~paste0(ZIPCODE," ECERS Score: ",Total.ECERS),
-                     labelOptions = labelOptions(direction = "auto"),
-                     highlight = highlightOptions(weight = 3,
-                                                  color = "blue",
-                                                  bringToFront = TRUE),
-                     group = "ECERS Score")%>%
-        addLayersControl(
-          baseGroups = c("Enrollment", "Emotional Support","Instructional Support","ECERS Score"),
-          options = layersControlOptions(collapsed = FALSE)
-        )
-      
-    } 
+    # data preparation
+    selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% pkdata$Zipcode)
+    subdat <- spTransform(selZip, CRS("+init=epsg:4326"))
     
+    zipcode_year <- pkdata%>%
+      filter(Year == as.numeric(input$pre_k_year))
     
+
     
+    subdat_data=subdat@data[,c("ZIPCODE","POPULATION")]
+    subdat.rownames=rownames(subdat_data)
+    subdat_data$ZIPCODE <- as.character(subdat_data$ZIPCODE)
+    zipcode_year$Zipcode  <- as.character(zipcode_year$Zipcode)
+    subdat_data=
+      subdat_data %>% left_join (zipcode_year, by=c("ZIPCODE" = "Zipcode"))
+    rownames(subdat_data)= subdat.rownames
+    
+    # ----- to write to geojson we need a SpatialPolygonsDataFrame
+    subdat<-SpatialPolygonsDataFrame(subdat, data=subdat_data)
+    
+    # ----- set uo color pallette https://rstudio.github.io/leaflet/colors.html
+    # Create a continuous palette function
+    pal.1 <- colorNumeric(
+      palette = "Reds",
+      domain <- subdat_data$Enrollment
+    )
+    pal.2 <- colorNumeric(
+      palette = "Reds",
+      domain <- subdat_data$CLASS.Emotional.Support.Score
+    )
+    pal.3 <- colorNumeric(
+      palette = "Reds",
+      domain <- subdat_data$CLASS.Instructional.Support.Score
+    )
+    pal.4 <- colorNumeric(
+      palette = "Reds",
+      domain <- subdat_data$Total.ECERS
+    )
+    
+    ################# Map Drawing 
+    leaflet() %>%
+      addProviderTiles(providers$Stamen.TonerLite,
+                       options = providerTileOptions(noWrap = TRUE)) %>%
+      setView(-73.983,40.7639,zoom = 12) %>% 
+      addPolygons( data = subdat,
+                   stroke = T, weight=1,
+                   fillOpacity = 0.6,
+                   color = ~pal.1(Enrollment),
+                   label = ~paste0(ZIPCODE," \n Enrollment: ",Enrollment),
+                   labelOptions = labelOptions(direction = "auto"),
+                   highlight = highlightOptions(weight = 3,
+                                                color = "blue",
+                                                bringToFront = TRUE),
+                   group = "Enrollment") %>%
+      addPolygons( data = subdat,
+                   stroke = T, weight=1,
+                   fillOpacity = 0.6,
+                   color = ~pal.2(CLASS.Emotional.Support.Score),
+                   label = ~paste0(ZIPCODE," Emotional Support: ",CLASS.Emotional.Support.Score),
+                   labelOptions = labelOptions(direction = "auto"),
+                   highlight = highlightOptions(weight = 3,
+                                                color = "blue",
+                                                bringToFront = TRUE),
+                   group = "Emotional Support Score")%>%
+      addPolygons( data = subdat,
+                   stroke = T, weight=1,
+                   fillOpacity = 0.6,
+                   color = ~pal.3(CLASS.Instructional.Support.Score),
+                   label = ~paste0(ZIPCODE," Instructional Support: ",CLASS.Instructional.Support.Score),
+                   labelOptions = labelOptions(direction = "auto"),
+                   highlight = highlightOptions(weight = 3,
+                                                color = "blue",
+                                                bringToFront = TRUE),
+                   group = "Instructional Support")%>%
+      addPolygons( data = subdat,
+                   stroke = T, weight=1,
+                   fillOpacity = 0.6,
+                   color = ~pal.4(CLASS.Instructional.Support.Score),
+                   label = ~paste0(ZIPCODE," ECERS Score: ",Total.ECERS),
+                   labelOptions = labelOptions(direction = "auto"),
+                   highlight = highlightOptions(weight = 3,
+                                                color = "blue",
+                                                bringToFront = TRUE),
+                   group = "ECERS Score")%>%
+      addLayersControl(
+        baseGroups = c("Enrollment", "Emotional Support Score",
+                       "Instructional Support","ECERS Score"),
+        options = layersControlOptions(collapsed = FALSE)
+      )
     
   })
   
   
+  ## Add School Markers
+  observeEvent(input$pk_submit,{
+
+    selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(pkschooldata$Zipcode))
+    # ----- Transform to EPSG 4326 - WGS84 (required)
+    subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+    
+    ## zip code slected
+    if(as.numeric(input$zip_pk) %in% as.numeric(pkschooldata$Zipcode)){
+      selected_zip <- as.numeric(input$zip_pk)
+    }else{
+      leafletProxy('pre_k_map') %>% 
+        clearMarkers()
+      return()}
+    
+    ## number of school displayed
+    school_number <- as.numeric(input$prek_number)
+    
+    ## filter based on zip and number
+    pkschooldata <- pkschooldata %>%
+      filter(Zipcode == selected_zip) %>% 
+      arrange(desc(Total.CLASS))
+    
+    
+    if (nrow(pkschooldata) > school_number) {
+      pkschooldata <- pkschooldata[1:school_number,]
+    }
+    
+  
+    leafletProxy('pre_k_map') %>% 
+      clearMarkers() %>%  
+      addAwesomeMarkers(~lon, ~lat,data = pkschooldata,
+                        label = ~paste0(`Program Name`))
+    
+  })
+  
+  ## Output details of school
+  observeEvent(input$pre_k_map_marker_click,{
+    clickerData = input$pre_k_map_marker_click
+    clat = clickerData$lat
+    clon = clickerData$lng
+    n = clickerData$lable
+    
+    ## The school of choosen marker
+    res <- pkschooldata %>% 
+      filter(round(lon,7) == round(clon,7), 
+             round(lat,7) == round(clat,7))
+    
+    
+    res <- res$`Program Name`
+    print(res)
+    
+  })
   
   ########################################## Other School Map #####################################
-  output$grade_map <- renderLeaflet({
+  output$grade_map <- renderLeaflet ({
     
     # data preparation
     if (input$`school type` == "Elementary"){
@@ -490,7 +418,6 @@ shinyServer(function(input, output) {
       filter(yr == as.numeric(input$gd_year))
     
     
-    
     #### zip code polygon
     subdat_data=subdat@data[,c("ZIPCODE","POPULATION")]
     subdat.rownames=rownames(subdat_data)
@@ -518,13 +445,6 @@ shinyServer(function(input, output) {
       palette = "Reds",
       domain <- subdat_data$RIES.mean
     )
-    
-    
-    
-    
-    
-    
-    
     
     ################# Map Drawing 
     leaflet() %>%
@@ -567,118 +487,120 @@ shinyServer(function(input, output) {
       )
     
     
-    
-    
   })
   
-  observeEvent(input$s_submit,{
-    if (input$`school type` == "Elementary"){
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(ele_zipcode$zipcode))
-      # ----- Transform to EPSG 4326 - WGS84 (required)
-      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-      school_zipcode <- ele_zipcode
-      school_detail <- ele_total
-    }
-    else if (input$`school type` == "Middle"){
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(mid_zipcode$zipcode))
-      # ----- Transform to EPSG 4326 - WGS84 (required)
-      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-      school_zipcode <- mid_zipcode
-      school_detail <- mid_total
-    }
-    else if (input$`school type` == "K-8"){
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(k_8_zipcode$zipcode))
-      # ----- Transform to EPSG 4326 - WGS84 (required)
-      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-      school_zipcode <- k_8_zipcode
-      school_detail <- k_8_total
-    }
-    else {
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(hs_zipcode$zipcode))
-      # ----- Transform to EPSG 4326 - WGS84 (required)
-      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-      school_zipcode <- hs_zipcode
-      school_detail <- hs_total
-    }
     
-    
-    
-    ## zip code slected
-    if(as.numeric(input$zip_s) %in% as.numeric(school_detail$X.zip)){
-      selected_zip <- as.numeric(input$zip_s)
-    }else{
+    ## Add School Markers
+    observeEvent (input$s_submit,{
+      
+      # data preparation
+      if (input$`school type` == "Elementary"){
+        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(ele_zipcode$zipcode))
+        # ----- Transform to EPSG 4326 - WGS84 (required)
+        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+        school_zipcode <- ele_zipcode
+        school_detail <- ele_total
+      }
+      
+      else if (input$`school type` == "Middle"){
+        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(mid_zipcode$zipcode))
+        # ----- Transform to EPSG 4326 - WGS84 (required)
+        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+        school_zipcode <- mid_zipcode
+        school_detail <- mid_total
+      }
+      else if (input$`school type` == "K-8"){
+        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(k_8_zipcode$zipcode))
+        # ----- Transform to EPSG 4326 - WGS84 (required)
+        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+        school_zipcode <- k_8_zipcode
+        school_detail <- k_8_total
+      }
+      else {
+        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(hs_zipcode$zipcode))
+        # ----- Transform to EPSG 4326 - WGS84 (required)
+        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+        school_zipcode <- hs_zipcode
+        school_detail <- hs_total
+      }
+      
+      
+      ## zip code slected
+      if(as.numeric(input$zip_s) %in% as.numeric(school_detail$X.zip)){
+        selected_zip <- as.numeric(input$zip_s)
+      }else{
+        leafletProxy('grade_map') %>% 
+          clearMarkers()
+        return()}
+      
+      ## number of school displayed
+      school_number <- as.numeric(input$s_number)
+      
+      ## filter based on zip and number
+      school_detail <- school_detail %>%
+        filter( X.zip. == selected_zip, year == 2018) %>% 
+        arrange(desc(`Student Achievement - Section Score` + `Rigorous Instruction - Element Score`))
+      
+      if (nrow(school_detail) > school_number) {
+        school_detail <- school_detail[1:school_number,]
+      }
+      
       leafletProxy('grade_map') %>% 
-        clearMarkers()
-      return()}
+        clearMarkers() %>%  
+        addAwesomeMarkers(~lon, ~lat,data = school_detail,
+                          label = ~paste0(`School Name`))
+      
+    })
     
-    ## number of school displayed
-    school_number <- as.numeric(input$s_number)
+    ## Output details of school
+    observeEvent(input$grade_map_marker_click,{
+      
+      clickerData = input$grade_map_marker_click
+      clat = clickerData$lat
+      clon = clickerData$lng
+      
+      if (input$`school type` == "Elementary"){
+        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(ele_zipcode$zipcode))
+        # ----- Transform to EPSG 4326 - WGS84 (required)
+        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+        school_zipcode <- ele_zipcode
+        school_detail <- ele_total
+      }
+      else if (input$`school type` == "Middle"){
+        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(mid_zipcode$zipcode))
+        # ----- Transform to EPSG 4326 - WGS84 (required)
+        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+        school_zipcode <- mid_zipcode
+        school_detail <- mid_total
+      }
+      else if (input$`school type` == "K-8"){
+        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(k_8_zipcode$zipcode))
+        # ----- Transform to EPSG 4326 - WGS84 (required)
+        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+        school_zipcode <- k_8_zipcode
+        school_detail <- k_8_total
+      }
+      else {
+        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(hs_zipcode$zipcode))
+        # ----- Transform to EPSG 4326 - WGS84 (required)
+        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+        school_zipcode <- hs_zipcode
+        school_detail <- hs_total
+      }
+      
+      res <- school_detail %>% 
+        filter(year == 2018) %>%
+        filter( lon == clon, lat == clat) 
+      res <- res[1,]$`School Name`
+      print(res)
+      
+    })
     
-    ## filter based on zip and number
-    school_detail <- school_detail %>%
-      filter(X.zip. == selected_zip, year == 2018) %>% 
-      arrange(desc(`Student Achievement - Section Score` + `Rigorous Instruction - Element Score`))
+    output$click_prek1 <- renderText('Succeed!!!!!')
+    output$click_prek2 <- renderText('Doule Succeed')
+    output$click_sa <- renderText('Succeed!!!!!')
+    output$click_sb <- renderText('Doule Succeed')
     
-    if (nrow(school_detail) > school_number) {
-      school_detail <- school_detail[1:school_number,]
-    }
-    
-    leafletProxy('grade_map') %>% 
-      clearMarkers() %>%  
-      addAwesomeMarkers(~lon, ~lat,data = school_detail,
-                        label = ~paste0(`School Name`))
-    
-    
-  })
-  
-  observeEvent(input$grade_map_marker_click,{
-    
-    clickerData = input$grade_map_marker_click
-    clat = clickerData$lat
-    clon = clickerData$lng
-    
-    if (input$`school type` == "Elementary"){
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(ele_zipcode$zipcode))
-      # ----- Transform to EPSG 4326 - WGS84 (required)
-      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-      school_zipcode <- ele_zipcode
-      school_detail <- ele_total
-    }
-    else if (input$`school type` == "Middle"){
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(mid_zipcode$zipcode))
-      # ----- Transform to EPSG 4326 - WGS84 (required)
-      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-      school_zipcode <- mid_zipcode
-      school_detail <- mid_total
-    }
-    else if (input$`school type` == "K-8"){
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(k_8_zipcode$zipcode))
-      # ----- Transform to EPSG 4326 - WGS84 (required)
-      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-      school_zipcode <- k_8_zipcode
-      school_detail <- k_8_total
-    }
-    else {
-      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(hs_zipcode$zipcode))
-      # ----- Transform to EPSG 4326 - WGS84 (required)
-      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-      school_zipcode <- hs_zipcode
-      school_detail <- hs_total
-    }
-    res <- school_detail %>% 
-      filter(lon == clon, lat == clat) %>% 
-      select(`School Name`)
-    res <- res[1,]
-    print(res)
     
   })
-  output$click_prek1 <- renderText('Succeed!!!!!')
-  output$click_prek2 <- renderText('Doule Succeed')
-  output$click_sa <- renderText('Succeed!!!!!')
-  output$click_sb <- renderText('Doule Succeed')
-
-  
-  
-})
-
-
+    
