@@ -5,7 +5,7 @@ library(leaflet)
 library(maps)
 library(rgdal)
 library(dplyr)
-
+library(plotly)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -24,12 +24,13 @@ shinyServer(function(input, output) {
   load("../output/processed_mid_total.RData")
   load("../output/processed_k_8_total.RData")
   load("../output/processed_hs_total.RData")
+  imper <- read_excel("../data/impact_performance.xlsx")
   pk2018 <- read.csv("../output/2018pkdata.final.csv")
   pk2016<-read.csv("../output/2016pkdata.final.csv")
   pk2017<-read.csv("../output/2017pkdata.final.csv")
   pkdata<-read.csv("../output/pkdata.final.csv")
-  pkschooldata <- read_excel("~/Desktop/5243/Project 2/data/2018_pk.xlsx",col_names = TRUE)
-  pk_latlon <- readRDS("/Users/liujiyuan/Desktop/5243/Project 2/output/pk_latlon.rds")
+  pkschooldata <- read_excel("../data/2018_pk.xlsx",col_names = TRUE)
+  pk_latlon <- readRDS("../output/pk_latlon.rds")
   pkschooldata <- pkschooldata[c(-1),]
 
   pkschooldata$Address <- paste(pkschooldata$`Address 1`,",",pkschooldata$`Address 2`)
@@ -560,46 +561,71 @@ shinyServer(function(input, output) {
       clon = clickerData$lng
       
       if (input$`school type` == "Elementary"){
-        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(ele_zipcode$zipcode))
-        # ----- Transform to EPSG 4326 - WGS84 (required)
-        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-        school_zipcode <- ele_zipcode
         school_detail <- ele_total
       }
       else if (input$`school type` == "Middle"){
-        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(mid_zipcode$zipcode))
-        # ----- Transform to EPSG 4326 - WGS84 (required)
-        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-        school_zipcode <- mid_zipcode
         school_detail <- mid_total
       }
       else if (input$`school type` == "K-8"){
-        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(k_8_zipcode$zipcode))
-        # ----- Transform to EPSG 4326 - WGS84 (required)
-        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-        school_zipcode <- k_8_zipcode
         school_detail <- k_8_total
       }
       else {
-        selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(hs_zipcode$zipcode))
-        # ----- Transform to EPSG 4326 - WGS84 (required)
-        subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
-        school_zipcode <- hs_zipcode
         school_detail <- hs_total
       }
       
       res <- school_detail %>% 
         filter(year == 2018) %>%
         filter( lon == clon, lat == clat) 
-      res <- res[1,]$`School Name`
-      print(res)
+      
+      ## Elementary to High Schools Output
+      output$click_school <- renderText(res[1,]$`School Name`)
+      output$click_sa <- renderText(res[1,]$`Student Achievement - Section Score`)
+      output$click_sb <- renderText(res[1,]$`Rigorous Instruction - Element Score`)
+      
+      
+      ## Race Pie Chart
+      output$click_ra <- renderPlotly({
+         race <- c("Asian","Black","Hispanic","White")
+         ds <- c(res[1,]$`Percent Asian`,res[1,]$`Percent Black`,res[1,]$`Percent Hispanic`,
+                res[1,]$`Percent White`)
+         pct <- round(ds/sum(ds)*100)
+         marker <- paste(race, pct) # add percents to labels
+         marker <- paste(marker,"%",sep="") # ad % to labels
+        plot_ly(labels=marker, values=ds, type = "pie") %>%
+          layout(showlegend=F)
+        
+      })
+      
+      ## Impact and Performance Chart
+      
+      output$click_IP <- renderPlotly({
+       
+          ## Prepare data
+          imper_type <- imper %>%
+            filter(`School Type` == res[1,]$`School Type`)
+          gg <- imper_type %>%
+            filter(`School Name` == res[1,]$`School Name`)
+       
+          
+          plot_ly(data = imper_type, x = ~Impact, y = ~Performance,type="scatter",
+                  color = I("grey"),
+                  hoverinfo = "text",
+                  text = paste(imper_type$`School Name`))%>%
+            add_trace(data = gg, x = ~Impact, y = ~Performance,color = I("red")) %>%
+            layout(showlegend=F)
+          
+        
+      })
+      
       
     })
-    
+      
+  
+    ## Pre-k Output
     output$click_prek1 <- renderText('Succeed!!!!!')
     output$click_prek2 <- renderText('Doule Succeed')
-    output$click_sa <- renderText('Succeed!!!!!')
-    output$click_sb <- renderText('Doule Succeed')
+    
+    
     
     
   })
