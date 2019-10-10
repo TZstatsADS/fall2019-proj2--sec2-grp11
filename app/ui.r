@@ -23,8 +23,7 @@ shinyUI(fluidPage
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                 ),
-                leafletOutput("num_schools_map"),
-                "Number of schools in each zip code",
+                leafletOutput("num_schools_map"), 
                 tags$div(
                   h3("Who are we creating value for?"),
                   tags$ul(
@@ -63,7 +62,7 @@ shinyUI(fluidPage
             tabPanel("Pre-K Schools",
                      sidebarPanel(
                        tags$div(
-                         tags$p("What are the filtering metrics:"),
+                         tags$p("What are the metrics:"),
                          tags$ul(
                            tags$li(tags$b("Enrollment:"), "Enrollment in the schools"),
                            tags$li(tags$b("Emotional Support:"), "*add explanation*"),
@@ -87,17 +86,16 @@ shinyUI(fluidPage
                        actionButton('pk_submit', 'Submit', icon = NULL, width = NULL),
                        
                        h3("Info. Of"),
-                       p("Student Achievement:",textOutput("click_prek1",inline = T)),
-                       p("Rigrous Instruction:",textOutput("click_prek2",inline = T)),
-                       h4("Impact and Performance"),
-                       h5("Based on all student achievement metrics, impact measures a school's teaching ability
-                    against expected outcomes, adjusted for incoming student factors. Performance is the
-                    unadjusted outcomes."),
-                       br(),
-                       h6("Demographic Categories")
+                       p(textOutput("click_pkschool")),
+                       p("Total Enrollment: ",strong(textOutput("click_prek1",inline = T))),
+                       p("Length of Pre-K Day: ",strong(textOutput("click_prek3",inline = T))),
+                       p("Early Drop-Off Available: ",strong(textOutput("click_prek4",inline = T))),
+                       p("Late Pick-Up Available: ",strong(textOutput("click_prek5",inline = T))),
+                       p("Meals: ",strong(textOutput("click_prek6",inline = T))),
+                       p("Playspace: ",strong(textOutput("click_prek7",inline = T))),
+                       p("Dual Language: ",strong(textOutput("click_prek8",inline = T))),
                        
-                       
-                       
+                    
                      ),
                      
                      mainPanel( 
