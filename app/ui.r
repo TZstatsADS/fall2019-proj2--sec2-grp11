@@ -64,14 +64,13 @@ shinyUI(fluidPage
                        tags$div(
                          tags$p("What are the metrics:"),
                          tags$ul(
-                           tags$li(tags$b("Enrollment:"), "Enrollment in the schools"),
+                           tags$li(tags$b("Enrollment:"), "Average Enrollment"),
                            tags$li(tags$b("Emotional Support:"), "*add explanation*"),
                            tags$li(tags$b("Instructional Support:"), "*add explanation*"),
                            tags$li(tags$b("ECERS score:")," a classroom assessment tool designed to measure the quality 
                             of group programs for infants and toddlers"
                            ),
-                           tags$li(tags$b("Year:"), "The year the data is pulled from"),
-                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools")
+                           
                            
                          ),
                          tags$p(" ")
