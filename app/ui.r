@@ -65,7 +65,7 @@ shinyUI(fluidPage
                                             value = ""),
                                   actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                                   tags$hr(),
-                                  sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
+                                  sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                      ),
                      mainPanel( 
                        leafletOutput("pre_k_map")
@@ -86,7 +86,7 @@ shinyUI(fluidPage
                                             value = ""),
                                   actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                                   tags$hr(),
-                                  sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
+                                  sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                      ),
                      mainPanel( 
                        leafletOutput("grade_map"))
