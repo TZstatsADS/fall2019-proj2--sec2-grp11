@@ -98,10 +98,13 @@ shinyUI(fluidPage
                        tags$div(
                          tags$p("Exlpanation on the filtering metrics:"),
                          tags$ul(
-                           tags$li(tags$b("ECERS")," is a classroom assessment tool designed to measure the quality 
-                                   of group programs for infants and toddlers"
+                           tags$li(tags$b("Type of school")," The type of grade school to display data for"
                            ),
-                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools")
+                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools"),
+                           tags$li(tags$b("Year:"), "The year the data is pulled from"),
+                           tags$li(tags$b("Zipcode:"), "The zipcode you want display data for"),
+                           tags$li(tags$b("Student Achievment"), "*add definition*"),
+                           tags$li(tags$b("Rigorous Instruction"), "*add definition*")
                            
                            
                            )),
