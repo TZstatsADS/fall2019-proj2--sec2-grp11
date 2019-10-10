@@ -7,7 +7,7 @@
 	+ Nicole Mbithe, ncm2144
 	+ Marshall Zhao, hz2587
 
-+ **Project summary**: Using publicly available NY data, our project analyzed the different schools by new york zipcodes and provided a map visualization to allow users to see the school quality by zipcode and get more stats if they click on the specific district. The different metrics that went into how into how we score the quality of a school included enrollment, ecers scores, educational assessment averages and many more.
++ **Project summary**: Using publicly available NY School Quality data, our project analyzed the different schools by new york zipcodes and provided a map visualization to allow users to see the school quality by zipcode and get more stats if they click on the specific district. The different metrics that went into how into how we score the quality of a school included enrollment, ecers scores, educational assessment averages and many more.
 
 + **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement.
 
