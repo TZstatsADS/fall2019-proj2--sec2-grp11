@@ -10,12 +10,12 @@ library(shinythemes)
 shinyUI(fluidPage
         (theme = shinytheme("flatly"),
           navbarPage(
-            "District Education Quality Assesment tool",
+            "DEQAT",
             tabPanel(
               "Introduction",
               mainPanel( 
                 tags$div(
-                  h1("** insert name of tool **"),
+                  h1("DEQAT - District Education Quality Assesment Tool"),
                   h3("Purpose of the tool"),
                   p("Using publicly available NY data, our tool allows users to visualize
                              the quality of schools per zipcode in the city. Different metrics such as
@@ -40,7 +40,7 @@ shinyUI(fluidPage
                   )
                 ),
                 tags$div(
-                  h2("How **tool ** works"),
+                  h2("How DEQAT works"),
                   h3("The Data"),
                   p("This dataset comes from the NYC department of education. It includes information about 
                               school emotional support, organization, teacher approval, as well as student performance 
@@ -60,15 +60,20 @@ shinyUI(fluidPage
             tabPanel("Pre-K Schools",
                      sidebarPanel(
                        tags$div(
-                         tags$p("Exlpanation on the filtering metrics:"),
+                         tags$p("What are the filtering metrics:"),
                          tags$ul(
-                           tags$li(tags$b("ECERS")," is a classroom assessment tool designed to measure the quality 
+                           tags$li(tags$b("Enrollment:"), "Enrollment in the schools"),
+                           tags$li(tags$b("Emotional Support:"), "*add explanation*"),
+                           tags$li(tags$b("Instructional Support:"), "*add explanation*"),
+                           tags$li(tags$b("ECERS score:")," a classroom assessment tool designed to measure the quality 
                             of group programs for infants and toddlers"
                             ),
-                           tags$li(tags$b("Enrollment:"), "Enrollment in the schools")
+                           tags$li(tags$b("Year:"), "The year the data is pulled from"),
+                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools")
                            
-                           
-                         )),
+                         ),
+                         tags$p(" ")
+                         ),
                        radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
                                                choices=c(2016, 2017, 2018), inline = TRUE),
                                   tags$hr(),
@@ -76,12 +81,21 @@ shinyUI(fluidPage
                                             value = ""),
                                   tags$hr(),
                                   sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
-                                  actionButton('pk_submit', 'Submit', icon = NULL, width = NULL),
-                                  
+                                  actionButton('pk_submit', 'Submit', icon = NULL, width = NULL)
+                     ),
+                     absolutePanel(id = "pk_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
+                                   top = 860, left = 44, right = "auto", bottom = "auto", width = 272, height = 400,
+                                   h3("School Information"), 
+                                   tags$b("Impact and Performance"),
+                                   br(),
+                                   "Based on all student achievement metrics, impact measures a school's teaching ability
+                                   against expected outcomes, adjusted for incoming student factors. Performance is the 
+                                   unadjusted outcomes.",
+                                   dataTableOutput('pk_table')
                      ),
                      mainPanel( 
                        tags$div(
-                         p("On this page, the tool displays some statistics for grade schools. You 
+                         p("On this page, the tool displays some statistics for pre-k schools. You 
                             can choose which factor to use to vary the heat on the map" )
                            
                            
@@ -90,7 +104,23 @@ shinyUI(fluidPage
                      )
             ),
             tabPanel("Grade Schools",
-                     sidebarPanel(radioButtons("school type", label="Type of school:",
+                     sidebarPanel(
+                       tags$div(
+                         tags$p("Explanation on the filtering metrics:"),
+                         tags$ul(
+                           tags$li(tags$b("Type of school")," The type of grade school to display data for"
+                           ),
+                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools"),
+                           tags$li(tags$b("Year:"), "The year the data is pulled from"),
+                           tags$li(tags$b("Zipcode:"), "The zipcode you want display data for"),
+                           tags$li(tags$b("Student Achievment"), "*add definition*"),
+                           tags$li(tags$b("Rigorous Instruction"), "*add definition*")
+                           
+                           
+                           ),
+                         p("You can also filter the number of schools you want to view data for")
+                         ),
+                       radioButtons("school type", label="Type of school:",
                                                choices = c("Elementary" = "Elementary", 
                                                            "Middle" = "Middle", 
                                                            "K-8" = "K-8",
@@ -106,10 +136,24 @@ shinyUI(fluidPage
                                   sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
                                   tags$hr(),
                               
-                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
+                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL)
                                   ),
-                     
+                     absolutePanel(id = "gd_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
+                                   top = 990, left = 44, right = "auto", bottom = "auto", width = 272, height = 400,
+                                   h3("School Information"), 
+                                   tags$b("Impact and Performance"),
+                                   br(),
+                                   "Based on all student achievement metrics, impact measures a school's teaching ability
+                                   against expected outcomes, adjusted for incoming student factors. Performance is the 
+                                   unadjusted outcomes.",
+                                   dataTableOutput('pk_table')
+                     ),
                      mainPanel( 
+                       tags$div(
+                         p("On this page, the tool displays some statistics for grade schools. You 
+                           can choose which factor to use to vary the heat on the map" )
+                         
+                         ),
                        leafletOutput("grade_map",height = 800))
             )
           )
