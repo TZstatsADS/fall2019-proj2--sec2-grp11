@@ -10,12 +10,12 @@ library(shinythemes)
 shinyUI(fluidPage
         (theme = shinytheme("flatly"),
           navbarPage(
-            "District Education Quality Assesment tool",
+            "DEQAT",
             tabPanel(
               "Introduction",
               mainPanel( 
                 tags$div(
-                  h1("** insert name of tool **"),
+                  h1("DEQAT - District Education Quality Assesment Tool"),
                   h3("Purpose of the tool"),
                   p("Using publicly available NY data, our tool allows users to visualize
                              the quality of schools per zipcode in the city. Different metrics such as
@@ -40,7 +40,7 @@ shinyUI(fluidPage
                   )
                 ),
                 tags$div(
-                  h2("How **tool ** works"),
+                  h2("How DEQAT works"),
                   h3("The Data"),
                   p("This dataset comes from the NYC department of education. It includes information about 
                               school emotional support, organization, teacher approval, as well as student performance 
@@ -65,7 +65,7 @@ shinyUI(fluidPage
                            tags$li(tags$b("Enrollment:"), "Enrollment in the schools"),
                            tags$li(tags$b("Emotional Support:"), "*add explanation*"),
                            tags$li(tags$b("Instructional Support:"), "*add explanation*"),
-                           tags$li(tags$b("ECERS score")," is a classroom assessment tool designed to measure the quality 
+                           tags$li(tags$b("ECERS score:")," a classroom assessment tool designed to measure the quality 
                             of group programs for infants and toddlers"
                             ),
                            tags$li(tags$b("Year:"), "The year the data is pulled from"),
@@ -96,7 +96,7 @@ shinyUI(fluidPage
             tabPanel("Grade Schools",
                      sidebarPanel(
                        tags$div(
-                         tags$p("Exlpanation on the filtering metrics:"),
+                         tags$p("Explanation on the filtering metrics:"),
                          tags$ul(
                            tags$li(tags$b("Type of school")," The type of grade school to display data for"
                            ),
@@ -107,7 +107,9 @@ shinyUI(fluidPage
                            tags$li(tags$b("Rigorous Instruction"), "*add definition*")
                            
                            
-                           )),
+                           ),
+                         p("You can also filter the number of schools you want to view data for")
+                         ),
                        radioButtons("school type", label="Type of school:",
                                                choices = c("Elementary" = "Elementary", 
                                                            "Middle" = "Middle", 
