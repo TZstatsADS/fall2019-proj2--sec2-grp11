@@ -63,6 +63,7 @@ shinyUI(fluidPage
                                   tags$hr(),
                                   textInput("zip_pk", "Explore the schools in a zip code:", 
                                             value = ""),
+                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                                   tags$hr(),
                                   sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                      ),
@@ -83,6 +84,7 @@ shinyUI(fluidPage
                                   tags$hr(),
                                   textInput("zip_s", "Explore the schools in a zip code:", 
                                             value = ""),
+                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
                                   tags$hr(),
                                   sliderInput("number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5)
                      ),

@@ -510,13 +510,13 @@ shinyServer(function(input, output) {
     
     
     ################# Take Zip Code Input ##############3
-    observeEvent(input$Go, {
-      A<-input$Test_OE
-      B<-input$Test_OE2
-      C<-input$Test_OE3
-      df<-c(A,B,C)
-      output$Observe_Out_E<-renderTable({df})
+    observeEvent(input$pre_k_submit, {
+      
+      selected_zip<-input$zip_s
+      
     })
+    
+    
     
     
     
@@ -560,7 +560,9 @@ shinyServer(function(input, output) {
       addLayersControl(
         baseGroups = c("Enrollment", "Student Achievement","Rigorous Instruction"),
         options = layersControlOptions(collapsed = FALSE)
-      )
+      ) %>% 
+      
+      addMarkers()
     
     
   })
