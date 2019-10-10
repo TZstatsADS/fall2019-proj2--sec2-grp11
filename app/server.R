@@ -209,8 +209,8 @@ shinyServer(function(input, output) {
     
   })
   
-
-####################################### Pre-K School ###########################################
+  
+  ####################################### Pre-K School ###########################################
   # pre-k map
   output$pre_k_map <- renderLeaflet({
     if(input$pre_k_year=="2016"){
@@ -446,13 +446,15 @@ shinyServer(function(input, output) {
       
     } 
     
-
-  
+    
+    
     
   })
- 
-########################################## Other School Map #####################################
-   output$grade_map <- renderLeaflet({
+  
+  
+  
+  ########################################## Other School Map #####################################
+  output$grade_map <- renderLeaflet({
     
     # data preparation
     if (input$`school type` == "Elementary"){
@@ -487,8 +489,8 @@ shinyServer(function(input, output) {
     zipcode_year <- school_zipcode%>%
       filter(yr == as.numeric(input$gd_year))
     
-
-
+    
+    
     #### zip code polygon
     subdat_data=subdat@data[,c("ZIPCODE","POPULATION")]
     subdat.rownames=rownames(subdat_data)
@@ -519,12 +521,12 @@ shinyServer(function(input, output) {
     
     
     
- 
-
     
     
     
-################# Map Drawing 
+    
+    
+    ################# Map Drawing 
     leaflet() %>%
       addProviderTiles(providers$Stamen.TonerLite,
                        options = providerTileOptions(noWrap = TRUE)) %>%
@@ -562,11 +564,11 @@ shinyServer(function(input, output) {
       addLayersControl(
         baseGroups = c("Enrollment", "Student Achievement","Rigorous Instruction"),
         options = layersControlOptions(collapsed = FALSE)
-      )  
-      
+      )
     
-
-
+    
+    
+    
   })
   
   observeEvent(input$s_submit,{
@@ -611,28 +613,65 @@ shinyServer(function(input, output) {
     
     ## number of school displayed
     school_number <- as.numeric(input$s_number)
-
+    
     ## filter based on zip and number
     school_detail <- school_detail %>%
-       filter(X.zip. == selected_zip, year == 2018) %>% 
-       arrange(desc(`Student Achievement - Section Score` + `Rigorous Instruction - Element Score`))
-     
+      filter(X.zip. == selected_zip, year == 2018) %>% 
+      arrange(desc(`Student Achievement - Section Score` + `Rigorous Instruction - Element Score`))
+    
     if (nrow(school_detail) > school_number) {
       school_detail <- school_detail[1:school_number,]
     }
     
-    print(school_detail$lon)
     leafletProxy('grade_map') %>% 
       clearMarkers() %>%  
       addAwesomeMarkers(~lon, ~lat,data = school_detail,
                         label = ~paste0(`School Name`))
-      
     
-
+    
   })
   
-  
-
+  observeEvent(input$grade_map_marker_click,{
+    
+    clickerData = input$grade_map_marker_click
+    clat = clickerData$lat
+    clon = clickerData$lng
+    
+    if (input$`school type` == "Elementary"){
+      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(ele_zipcode$zipcode))
+      # ----- Transform to EPSG 4326 - WGS84 (required)
+      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+      school_zipcode <- ele_zipcode
+      school_detail <- ele_total
+    }
+    else if (input$`school type` == "Middle"){
+      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(mid_zipcode$zipcode))
+      # ----- Transform to EPSG 4326 - WGS84 (required)
+      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+      school_zipcode <- mid_zipcode
+      school_detail <- mid_total
+    }
+    else if (input$`school type` == "K-8"){
+      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(k_8_zipcode$zipcode))
+      # ----- Transform to EPSG 4326 - WGS84 (required)
+      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+      school_zipcode <- k_8_zipcode
+      school_detail <- k_8_total
+    }
+    else {
+      selZip <- subset(NYCzipcodes, NYCzipcodes$ZIPCODE %in% as.character(hs_zipcode$zipcode))
+      # ----- Transform to EPSG 4326 - WGS84 (required)
+      subdat<-spTransform(selZip, CRS("+init=epsg:4326"))
+      school_zipcode <- hs_zipcode
+      school_detail <- hs_total
+    }
+    res <- school_detail %>% 
+      filter(lon == clon, lat == clat) %>% 
+      select(`School Name`)
+    res <- res[1,]
+    print(res)
+    
+  })
 })
 
 
