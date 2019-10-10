@@ -58,7 +58,18 @@ shinyUI(fluidPage
               )
             ),
             tabPanel("Pre-K Schools",
-                     sidebarPanel(radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
+                     sidebarPanel(
+                       tags$div(
+                         tags$p("Exlpanation on the filtering metrics:"),
+                         tags$ul(
+                           tags$li(tags$b("ECERS")," is a classroom assessment tool designed to measure the quality 
+                            of group programs for infants and toddlers"
+                            ),
+                           tags$li(tags$b("Enrollment:"), "Enrollment in the schools")
+                           
+                           
+                         )),
+                       radioButtons(inputId="pre_k_year", label="Select the year you want data for:", 
                                                choices=c(2016, 2017, 2018), inline = TRUE),
                                   tags$hr(),
                                   textInput("zip_pk", "Explore the schools in a zip code:", 
@@ -69,6 +80,12 @@ shinyUI(fluidPage
                                   
                      ),
                      mainPanel( 
+                       tags$div(
+                         p("On this page, the tool displays some statistics for grade schools. You 
+                            can choose which factor to use to vary the heat on the map" )
+                           
+                           
+                         ),
                        leafletOutput("pre_k_map",height = 800)
                      )
             ),
