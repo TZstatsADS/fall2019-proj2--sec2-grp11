@@ -507,6 +507,21 @@ shinyServer(function(input, output) {
       domain <- subdat_data$RIES.mean
     )
     
+    
+    
+    ################# Take Zip Code Input ##############3
+    observeEvent(input$Go, {
+      A<-input$Test_OE
+      B<-input$Test_OE2
+      C<-input$Test_OE3
+      df<-c(A,B,C)
+      output$Observe_Out_E<-renderTable({df})
+    })
+    
+    
+    
+    
+    
 ################# Map Drawing 
     leaflet() %>%
       addProviderTiles(providers$Stamen.TonerLite,
