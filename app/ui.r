@@ -84,7 +84,7 @@ shinyUI(fluidPage
                                   actionButton('pk_submit', 'Submit', icon = NULL, width = NULL)
                      ),
                      absolutePanel(id = "pk_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
-                                   top = 720, left = 44, right = "auto", bottom = "auto", width = 272, height = 400,
+                                   top = 860, left = 44, right = "auto", bottom = "auto", width = 272, height = 400,
                                    h3("School Information"), 
                                    tags$b("Impact and Performance"),
                                    br(),
@@ -137,7 +137,7 @@ shinyUI(fluidPage
                                   actionButton('s_submit', 'Submit', icon = NULL, width = NULL)
                                   ),
                      absolutePanel(id = "gd_school_panel", class = "panel panel-default", fixed= FALSE, draggable = FALSE,
-                                   top = 860, left = 44, right = "auto", bottom = "auto", width = 272, height = 400,
+                                   top = 990, left = 44, right = "auto", bottom = "auto", width = 272, height = 400,
                                    h3("School Information"), 
                                    tags$b("Impact and Performance"),
                                    br(),
