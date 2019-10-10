@@ -6,6 +6,7 @@ library(maps)
 library(rgdal)
 library(dplyr)
 library(plotly)
+library(readxl)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {

@@ -23,7 +23,8 @@ shinyUI(fluidPage
                              the quality of schools per zipcode in the city. Different metrics such as
                              emotional support and student's academic performance go into how we score the quality of a school.")
                 ),
-                leafletOutput("num_schools_map"), 
+                leafletOutput("num_schools_map"),
+                "Number of schools in each zip code",
                 tags$div(
                   h3("Who are we creating value for?"),
                   tags$ul(
@@ -93,7 +94,7 @@ shinyUI(fluidPage
                     against expected outcomes, adjusted for incoming student factors. Performance is the
                     unadjusted outcomes."),
                        br(),
-                       h6("Demographic Categories"),
+                       h6("Demographic Categories")
                        
                        
                        
