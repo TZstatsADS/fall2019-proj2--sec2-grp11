@@ -65,7 +65,7 @@ shinyUI(fluidPage
                            tags$li(tags$b("ECERS")," is a classroom assessment tool designed to measure the quality 
                             of group programs for infants and toddlers"
                             ),
-                           tags$li(tags$b("Enrollment:"), "Enrollment in the schools")
+                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools")
                            
                            
                          )),
@@ -76,12 +76,11 @@ shinyUI(fluidPage
                                             value = ""),
                                   tags$hr(),
                                   sliderInput("prek_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
-                                  actionButton('pk_submit', 'Submit', icon = NULL, width = NULL),
-                                  
+                                  actionButton('pk_submit', 'Submit', icon = NULL, width = NULL)
                      ),
                      mainPanel( 
                        tags$div(
-                         p("On this page, the tool displays some statistics for grade schools. You 
+                         p("On this page, the tool displays some statistics for pre-k schools. You 
                             can choose which factor to use to vary the heat on the map" )
                            
                            
@@ -90,7 +89,18 @@ shinyUI(fluidPage
                      )
             ),
             tabPanel("Grade Schools",
-                     sidebarPanel(radioButtons("school type", label="Type of school:",
+                     sidebarPanel(
+                       tags$div(
+                         tags$p("Exlpanation on the filtering metrics:"),
+                         tags$ul(
+                           tags$li(tags$b("ECERS")," is a classroom assessment tool designed to measure the quality 
+                                   of group programs for infants and toddlers"
+                           ),
+                           tags$li(tags$b("Enrollment:"), "Average enrollment in the schools")
+                           
+                           
+                           )),
+                       radioButtons("school type", label="Type of school:",
                                                choices = c("Elementary" = "Elementary", 
                                                            "Middle" = "Middle", 
                                                            "K-8" = "K-8",
@@ -106,10 +116,15 @@ shinyUI(fluidPage
                                   sliderInput("s_number", "Select the number of schools to display in the zip code:", min = 0, max = 10, value = 5),
                                   tags$hr(),
                               
-                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL),
+                                  actionButton('s_submit', 'Submit', icon = NULL, width = NULL)
                                   ),
                      
                      mainPanel( 
+                       tags$div(
+                         p("On this page, the tool displays some statistics for grade schools. You 
+                           can choose which factor to use to vary the heat on the map" )
+                         
+                         ),
                        leafletOutput("grade_map",height = 800))
             )
           )
